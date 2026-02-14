@@ -12,3 +12,88 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model Event {
+  id           String   @id @default(cuid())
+  name         String
+  startTime    DateTime
+  endTime      DateTime
+  expiryWindow Int
+  createdAt    DateTime @default(now())
+
+  identities Identity[]
+  receipts   Receipt[]
+  proofs     Proof[]
+}
+
+model Identity {
+  id        String     @id @default(cuid())
+  issuedAt  DateTime   @default(now())
+  expiresAt DateTime
+  status    StatusType @default(ACTIVE)
+
+  attendedAt DateTime?
+
+  eventId String
+  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  sessions Session[]
+  receipts Receipt[]
+  proofs   Proof[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  expiresAt DateTime
+
+  identityId String
+  identity   Identity @relation(fields: [identityId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+}
+
+model Receipt {
+  id          String   @id @default(cuid())
+  description String
+  issuedAt    DateTime @default(now())
+  expiresAt   DateTime
+
+  eventId String
+  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  identityId String
+  identity   Identity @relation(fields: [identityId], references: [id], onDelete: Cascade)
+
+  proof Proof?
+}
+
+model Proof {
+  id   String    @id @default(cuid())
+  type ProofType
+
+  payload   Json
+  signature String
+
+  issuedAt  DateTime @default(now())
+  expiresAt DateTime
+
+  eventId String
+  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  identityId String
+  identity   Identity @relation(fields: [identityId], references: [id], onDelete: Cascade)
+
+  receiptId String?  @unique
+  receipt   Receipt? @relation(fields: [receiptId], references: [id], onDelete: Cascade)
+}
+
+enum StatusType {
+  ACTIVE
+  EXPIRED
+}
+
+enum ProofType {
+  ATTENDANCE
+  RECEIPT
+}
