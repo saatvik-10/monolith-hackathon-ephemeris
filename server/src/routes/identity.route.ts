@@ -1,8 +1,10 @@
 import { Hono } from 'hono';
+import { Identity } from '../controllers/identity.controller';
 
 const identityRoute = new Hono();
+const controller = new Identity();
 
-identityRoute.post('/issue');
-identityRoute.get('/status');
+identityRoute.post('/issue', controller.identityStatus);
+identityRoute.get('/status', controller.identityStatus);
 
 export { identityRoute };

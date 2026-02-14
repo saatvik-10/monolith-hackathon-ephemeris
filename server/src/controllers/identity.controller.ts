@@ -1,0 +1,54 @@
+import type { Context } from 'hono';
+import { prisma } from '../../prisma';
+
+export class Identity {
+  async issueIdentity(ctx: Context) {
+    try {
+      const eventId = ctx.req.param('eventId');
+
+      if (!eventId) {
+        return ctx.json('Event ID is required', 400);
+      }
+
+      const event = await prisma.event.findUnique({
+        where: { id: eventId },
+      });
+
+      if (!event) {
+        return ctx.json('Event not found', 404);
+      }
+
+      const expiresAt = new Date(
+        event.endTime.getTime() + event.expiryWindow * 60 * 1000,
+      );
+
+      const newIdentity = await prisma.identity.create({
+        data: {
+          eventId,
+          expiresAt,
+        },
+      });
+
+      return ctx.json(newIdentity, 201);
+    } catch (err) {
+      console.log('Err issuing new identity', err);
+      return ctx.json('Err issuing new identity', 500);
+    }
+  }
+
+  async identityStatus(ctx: Context) {
+    try {
+        const identityStatus = await prisma.identity.findUnique({
+            where: {
+                id: //<token part>
+            },
+            select: {
+                status: true
+            }
+        })
+    } catch (err) {
+        console.log('Err getting identity status', err);
+      return ctx.json('Err getting identity status', 500);
+    }
+  }
+}
