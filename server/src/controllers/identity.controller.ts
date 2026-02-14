@@ -38,16 +38,18 @@ export class Identity {
 
   async identityStatus(ctx: Context) {
     try {
-        const identityStatus = await prisma.identity.findUnique({
-            where: {
-                id: //<token part>
-            },
-            select: {
-                status: true
-            }
-        })
+      const identity = ctx.get('identity');
+
+      return ctx.json(
+        {
+          status: identity.status,
+          expiresAt: identity.expiresAt,
+          attendedAt: identity.attendedAt,
+        },
+        200,
+      );
     } catch (err) {
-        console.log('Err getting identity status', err);
+      console.log('Err getting identity status', err);
       return ctx.json('Err getting identity status', 500);
     }
   }
