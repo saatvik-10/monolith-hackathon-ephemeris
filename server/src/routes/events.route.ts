@@ -1,9 +1,11 @@
 import { Hono } from 'hono';
+import { Events } from '../controllers/events.controller';
 
 const eventRoute = new Hono();
+const controller = new Events();
 
-eventRoute.post('');
-eventRoute.get('/:eventId');
-eventRoute.get('/:eventId/qr');
+eventRoute.post('', controller.createEvent);
+eventRoute.get('/:eventId', controller.getEventId);
+eventRoute.get('/:eventId/qr', controller.getEventQr);
 
 export { eventRoute };
