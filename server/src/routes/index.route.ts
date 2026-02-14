@@ -10,7 +10,7 @@ const router = new Hono();
 router.route('/events', eventRoute);
 router.route('/identity', identityRoute);
 router.route('/attendance', attendanceRoute);
-router.route('/receipt', receiptRoute);
+router.route('/receipts', receiptRoute);
 router.route('/proofs', proofRoute);
 
 export default router;
