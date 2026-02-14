@@ -3,6 +3,9 @@
   "module": "src/index.ts",
   "type": "module",
   "private": true,
+  "scripts": {
+    "dev:docker": "bunx prisma migrate dev && bun run src/index.ts"
+  },
   "devDependencies": {
     "@types/bun": "latest",
     "@types/jsonwebtoken": "^9.0.10",
