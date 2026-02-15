@@ -1,5 +1,6 @@
 import type { Context } from 'hono';
 import { prisma } from '../../prisma';
+import { signProof } from '../lib/generateSignature';
 
 export class Attendance {
   async markAttendance(ctx: Context) {
@@ -17,6 +18,12 @@ export class Attendance {
         data: { attendedAt: now },
       });
 
+      const payload = {
+        eventId: updatedIdentity.eventId,
+        identityId: updatedIdentity.id,
+        attendedAt: now.toISOString(),
+      };
+
       await prisma.proof.create({
         data: {
           type: 'ATTENDANCE',
@@ -24,11 +31,8 @@ export class Attendance {
           eventId: updatedIdentity.eventId,
           issuedAt: now,
           expiresAt: updatedIdentity.expiresAt,
-          payload: {
-            eventId: updatedIdentity.eventId,
-            attendedAt: now.toISOString(),
-          },
-          signature: '', //with web3 integration
+          payload,
+          signature: signProof(payload),
         },
       });
     } catch (err) {
