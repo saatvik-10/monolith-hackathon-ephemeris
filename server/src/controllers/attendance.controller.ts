@@ -6,6 +6,10 @@ export class Attendance {
   async markAttendance(ctx: Context) {
     const identity = ctx.get('identity');
 
+    if (!identity) {
+      return ctx.json('Unauthorized: No identity found', 401);
+    }
+
     if (identity.attendedAt) {
       return ctx.json('Attendance already marked', 409);
     }
@@ -35,6 +39,8 @@ export class Attendance {
           signature: signProof(payload),
         },
       });
+
+      return ctx.json(updatedIdentity, 201);
     } catch (err) {
       console.log('Err marking attendance', err);
       return ctx.json('Err marking attendance', 500);

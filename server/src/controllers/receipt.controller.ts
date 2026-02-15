@@ -9,6 +9,10 @@ export class Receipt {
 
     const identity = ctx.get('identity');
 
+    if (!identity) {
+      return ctx.json('Unauthorized: No identity found', 401);
+    }
+
     if (!data.success) {
       return ctx.json('Invalid input', 422);
     }
@@ -45,6 +49,8 @@ export class Receipt {
           signature: signProof(payload),
         },
       });
+
+      return ctx.json(newReceipt, 201);
     } catch (err) {
       console.log('Err issuing receipt', err);
       return ctx.json('Err issuing receipt', 500);
