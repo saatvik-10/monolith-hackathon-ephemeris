@@ -39,8 +39,8 @@ export async function proxy(ctx: Context, next: Next) {
       return ctx.text('Identity expired', 401);
     }
 
-    ctx.set('sessiong_id', payload);
-    ctx.set('identity_id', identity);
+    ctx.set('session', payload);
+    ctx.set('identity', identity);
 
     await next();
   } catch (err) {
