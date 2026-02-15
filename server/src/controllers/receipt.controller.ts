@@ -60,10 +60,14 @@ export class Receipt {
   async getReceipts(ctx: Context) {
     const identity = ctx.get('identity');
 
+    if (!identity) {
+      return ctx.json('Unauthorized: No identity found', 401);
+    }
+
     try {
       const receipts = await prisma.receipt.findMany({
         where: {
-          id: identity.id,
+          identityId: identity.id,
         },
       });
 
