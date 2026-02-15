@@ -1,6 +1,6 @@
 import type { Context } from 'hono';
 import { prisma } from '../../prisma';
-import { signProof } from '../lib/generateSignature';
+import { signProof } from '../lib/signature';
 
 export class Attendance {
   async markAttendance(ctx: Context) {
