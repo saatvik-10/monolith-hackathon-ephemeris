@@ -48,11 +48,11 @@ export class Proof {
     }
   }
 
-  async getVerifictaions(ctx: Context) {
+  async getVerifications(ctx: Context) {
     const identity = ctx.get('identity');
 
     try {
-      const proofs = prisma.proof.findMany({
+      const proofs = await prisma.proof.findMany({
         where: {
           identityId: identity.id,
         },
