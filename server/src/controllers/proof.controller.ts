@@ -1,6 +1,10 @@
 import type { Context } from 'hono';
 import { prisma } from '../../prisma';
-import { verifySign, type ProofPayload } from '../lib/signature';
+import {
+  verifySign,
+  type AttendanceProofPayload,
+  type ReceiptProofPayload,
+} from '../lib/signature';
 import { proofSchema } from '../validators/proof.validator';
 
 export class Proof {
@@ -24,14 +28,17 @@ export class Proof {
         return ctx.json({ valid: false, reason: 'expired' }, 410);
       }
 
-      const valid = verifySign(proof.payload as ProofPayload, proof.signature);
+      const isValid = verifySign(
+        proof.payload as AttendanceProofPayload | ReceiptProofPayload,
+        proof.signature,
+      );
 
-      if (!valid) {
+      if (!isValid) {
         return ctx.json({ valid: false, reason: 'invalid_signature' }, 404);
       }
 
       return ctx.json({
-        valid,
+        isValid,
         type: proof.type,
         expiresAt: proof.expiresAt,
       });
