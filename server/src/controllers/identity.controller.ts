@@ -40,6 +40,10 @@ export class Identity {
     try {
       const identity = ctx.get('identity');
 
+      if (!identity) {
+        return ctx.json('Unauthorized: No identity found', 401);
+      }
+
       return ctx.json(
         {
           status: identity.status,

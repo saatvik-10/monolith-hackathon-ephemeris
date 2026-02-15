@@ -51,6 +51,10 @@ export class Proof {
   async getVerifications(ctx: Context) {
     const identity = ctx.get('identity');
 
+    if (!identity) {
+      return ctx.json('Unauthorized: No identity found', 401);
+    }
+
     try {
       const proofs = await prisma.proof.findMany({
         where: {
