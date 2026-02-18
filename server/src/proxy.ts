@@ -1,35 +1,43 @@
 import type { Context, Next } from 'hono';
+import { getCookie } from 'hono/cookie';
 import { verifyJWT } from './lib/jwt';
 import { prisma } from '../prisma';
 
 export async function proxy(ctx: Context, next: Next) {
   try {
-    const authHeader = ctx.req.header('Authorization');
+    const cookieToken = getCookie(ctx, 'auth_token');
 
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    const authHeader = ctx.req.header('Authorization');
+    const headerToken = authHeader?.startsWith('Bearer ')
+      ? authHeader.slice(7)
+      : null;
+
+    const token = cookieToken || headerToken;
+
+    if (!token) {
       return ctx.text('Not authenticated', 401);
     }
-
-    const token = authHeader.slice(7);
 
     const payload = await verifyJWT(token);
 
     if (!payload) {
-      ctx.text('Invalid or expired token', 401);
-      return;
+      return ctx.text('Invalid or expired token', 401);
     }
 
     const session = await prisma.session.findUnique({
       where: { id: payload.sid },
+      include: { identity: true },
     });
 
-    if (!session || session.expiresAt < new Date()) {
-      return ctx.text('Session expired', 401);
+    if (!session) {
+      return ctx.text('Session not found', 404);
     }
 
-    const identity = await prisma.identity.findUnique({
-      where: { id: session.identityId },
-    });
+    if (session.expiresAt < new Date()) {
+      return ctx.json('Session expired', 401);
+    }
+
+    const identity = session.identity;
 
     if (
       !identity ||
@@ -39,7 +47,7 @@ export async function proxy(ctx: Context, next: Next) {
       return ctx.text('Identity expired', 401);
     }
 
-    ctx.set('session', payload);
+    ctx.set('session', session);
     ctx.set('identity', identity);
 
     await next();
