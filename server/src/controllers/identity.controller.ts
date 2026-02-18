@@ -1,5 +1,7 @@
 import type { Context } from 'hono';
 import { prisma } from '../../prisma';
+import { generateJWT } from '../lib/jwt';
+import { generateCookie } from '../lib/cookie';
 
 export class Identity {
   async issueIdentity(ctx: Context) {
@@ -29,7 +31,25 @@ export class Identity {
         },
       });
 
-      return ctx.json(newIdentity, 201);
+      const session = await prisma.session.create({
+        data: {
+          identityId: newIdentity.id,
+          expiresAt: newIdentity.expiresAt,
+        },
+      });
+
+      const token = await generateJWT(session.id);
+
+      generateCookie(ctx, 'auth_token', token);
+
+      return ctx.json(
+        {
+          token,
+          identityId: newIdentity.id,
+          expiresAt: newIdentity.expiresAt,
+        },
+        201,
+      );
     } catch (err) {
       console.log('Err issuing new identity', err);
       return ctx.json('Err issuing new identity', 500);
