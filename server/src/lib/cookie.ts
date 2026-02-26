@@ -8,9 +8,9 @@ export const generateCookie = (
 ) => {
   setCookie(ctx, tokenName, token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production', // true in production (HTTPS)
+    secure: process.env.NODE_ENV === 'production',
     sameSite: 'Lax',
     path: '/',
-    maxAge: 15 * 60, // match JWT TTL
+    maxAge: 15 * 60,
   });
 };
