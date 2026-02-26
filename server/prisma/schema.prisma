@@ -14,13 +14,16 @@ datasource db {
 }
 
 model Event {
-  id           String   @id @default(cuid())
-  name         String
-  image         String
-  startTime    DateTime
-  endTime      DateTime
-  expiryWindow Int
-  createdAt    DateTime @default(now())
+  id              String   @id @default(cuid())
+  name            String
+  image           String
+  startTime       DateTime
+  endTime         DateTime
+  nftEnabled      Boolean  @default(false)
+  nftPayer        String   @default("organizer")
+  organizerWallet String?
+  expiryWindow    Int
+  createdAt       DateTime @default(now())
 
   identities Identity[]
   receipts   Receipt[]
@@ -55,10 +58,17 @@ model Session {
 }
 
 model Receipt {
-  id          String   @id @default(cuid())
-  description String
-  issuedAt    DateTime @default(now())
-  expiresAt   DateTime
+  id            String    @id @default(cuid())
+  description   String
+  issuedAt      DateTime  @default(now())
+  expiresAt     DateTime
+  contentHash   String?   @unique
+  walletAddress String?
+  mintAddress   String?
+  metadataUri   String?
+  nftMinted     Boolean   @default(false)
+  mintedAt      DateTime?
+  nftError      String?
 
   eventId String
   event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
@@ -67,6 +77,9 @@ model Receipt {
   identity   Identity @relation(fields: [identityId], references: [id], onDelete: Cascade)
 
   proof Proof?
+
+  @@index([walletAddress])
+  @@index([mintAddress])
 }
 
 model Proof {
