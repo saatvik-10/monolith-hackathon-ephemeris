@@ -14,6 +14,7 @@ export class Events {
       const newEvent = await prisma.event.create({
         data: {
           name: data.data.name,
+          image: data.data.image,
           startTime: new Date(data.data.startTime),
           endTime: new Date(data.data.endTime),
           expiryWindow: 360,
