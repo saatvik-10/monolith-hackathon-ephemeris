@@ -6,7 +6,6 @@ import { generateContentHash } from '../lib/hash';
 import { mintNFT } from '../utils/mint';
 import { uploadToIPFS } from '../utils/ipfs';
 import { generateMetadata, validateMetadata } from '../utils/metadata';
-import { success } from 'zod';
 export class Receipt {
   async issueReceipt(ctx: Context) {
     const data = receiptSchema.safeParse(await ctx.req.json());
@@ -92,8 +91,6 @@ export class Receipt {
     const receiptId = ctx.req.param('receipt_id');
     const data = nftMintSchema.safeParse(await ctx.req.json());
 
-    const walletAddress = data.data?.walletAddress;
-
     if (!data.success) {
       return ctx.json('Invalid input', 422);
     }
@@ -118,6 +115,10 @@ export class Receipt {
         return ctx.json('NFT already minted for this receipt', 409);
       }
 
+      const { walletAddress } = data.data;
+
+      const organizerWallet = receipt.event.organizerWallet;
+
       const contentHash = generateContentHash(
         receiptId,
         receipt.eventId,
@@ -131,7 +132,7 @@ export class Receipt {
         contentHash,
         receipt.event.image,
         receipt.id,
-        walletAddress as string,
+        walletAddress,
       );
 
       if (!validateMetadata(metadata)) {
@@ -142,8 +143,9 @@ export class Receipt {
 
       const { mintAddress } = await mintNFT(
         metadataUri,
-        walletAddress as string,
+        walletAddress,
         receipt.event.name,
+        organizerWallet,
       );
 
       const updatedReceipt = await prisma.receipt.update({
