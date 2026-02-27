@@ -6,4 +6,9 @@ export const receiptSchema = z.object({
     .min(5, 'Description must be atleast 5 characters long'),
 });
 
+export const nftMintSchema = z.object({
+  walletAddress: z.string(),
+});
+
 export type receiptType = z.infer<typeof receiptSchema>;
+export type nftMintType = z.infer<typeof nftMintSchema>;
