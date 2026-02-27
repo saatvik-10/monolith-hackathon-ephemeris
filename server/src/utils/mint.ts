@@ -8,29 +8,24 @@ interface MintNFTResult {
 }
 
 const SOLANA_RPC_URL = clusterApiUrl('devnet');
-const METAPLEX_AUTHORITY_SECRET = process.env.METAPLEX_AUTHORITY_SECRET!;
 
-if (!METAPLEX_AUTHORITY_SECRET) {
-  throw new Error('METAPLEX_AUTHORITY_SECRET is missing!');
-}
-
-function getOrganizerKeypair(): Keypair {
+function getOrganizerKeypair(organizerPvtWalletKey: string): Keypair {
   try {
-    const secretBytes = bs58.decode(METAPLEX_AUTHORITY_SECRET);
+    const secretBytes = bs58.decode(organizerPvtWalletKey);
     return Keypair.fromSecretKey(new Uint8Array(secretBytes));
   } catch (err) {
     throw new Error(
-      `Failed to decode METAPLEX_AUTHORITY_SECRET: ${
+      `Failed to decode METAPLEX: ${
         err instanceof Error ? err.message : 'Unknown error'
       }`,
     );
   }
 }
 
-function initializeMetaplex(): Metaplex {
+function initializeMetaplex(organizerPvtWalletKey: string): Metaplex {
   try {
     const connection = new Connection(SOLANA_RPC_URL, 'confirmed');
-    const organizerKeypair = getOrganizerKeypair();
+    const organizerKeypair = getOrganizerKeypair(organizerPvtWalletKey);
 
     const metaplex = Metaplex.make(connection).use(
       keypairIdentity(organizerKeypair),
@@ -50,13 +45,14 @@ export async function mintNFT(
   metadataUri: string,
   recipientWallet: string,
   eventName: string,
+  organizerPvtWalletKey: string,
 ): Promise<MintNFTResult> {
   try {
-    if (!metadataUri || !metadataUri.startsWith('ipgs://')) {
+    if (!metadataUri || !metadataUri.startsWith('ipfs://')) {
       throw new Error('Invalid metadata uri format');
     }
 
-    const metaplex = initializeMetaplex();
+    const metaplex = initializeMetaplex(organizerPvtWalletKey);
 
     let receiptPublicKey: PublicKey;
 
