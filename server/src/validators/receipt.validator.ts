@@ -7,7 +7,7 @@ export const receiptSchema = z.object({
 });
 
 export const nftMintSchema = z.object({
-  walletAddress: z.string(),
+  walletAddress: z.string().min(32).max(44),
 });
 
 export type receiptType = z.infer<typeof receiptSchema>;
