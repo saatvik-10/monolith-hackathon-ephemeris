@@ -17,11 +17,13 @@ export class Events {
           image: data.data.image,
           startTime: new Date(data.data.startTime),
           endTime: new Date(data.data.endTime),
-          expiryWindow: 360,
+          organizerWallet: data.data.organizerWallet,
+          nftEnabled: data.data.nftEnabled,
+          expiryWindow: data.data.expiryWindow,
         },
       });
 
-      return ctx.json(newEvent.id, 201);
+      return ctx.json(newEvent, 201);
     } catch (err) {
       console.log('Err creating new event', err);
       return ctx.json('Err creating new event', 500);
