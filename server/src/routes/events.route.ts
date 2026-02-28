@@ -4,7 +4,7 @@ import { Events } from '../controllers/events.controller';
 const eventRoute = new Hono();
 const controller = new Events();
 
-eventRoute.post('', controller.createEvent);
+eventRoute.post('/create', controller.createEvent);
 eventRoute.get('/:eventId', controller.getEventId);
 eventRoute.get('/:eventId/qr', controller.getEventQr);
 
