@@ -26,11 +26,21 @@ export async function uploadToIPFS(metadata: object): Promise<string> {
 
     console.log(`Metadata size: ${sizeInKB.toFixed(2)} KB`);
 
-    const blob = new Blob([metadataJson], { type: 'application/json' });
+    // const blob = new Blob([metadataJson], { type: 'application/json' });
 
     const imageUrl = (metadata as any).image;
-    const imageResponse = await fetch(imageUrl);
-    const imageBlob = await imageResponse.blob();
+    let imageBlob: Blob;
+
+    try {
+      const imageResponse = await fetch(imageUrl);
+      imageBlob = await imageResponse.blob();
+    } catch (err) {
+      console.warn(`Failed to fetch ${imageUrl}, using placeholder`);
+      const placeholderResponse = await fetch(
+        'https://via.placeholder.com/400',
+      );
+      imageBlob = await placeholderResponse.blob();
+    }
 
     const cid = await client.store({
       name: (metadata as any).name || 'attendance-proof',
