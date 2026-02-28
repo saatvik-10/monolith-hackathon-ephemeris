@@ -107,7 +107,7 @@ export class Receipt {
         return ctx.json('Receipt not found', 404);
       }
 
-      if (!receipt.identityId != identity.id) {
+      if (receipt.identityId !== identity.id) {
         return ctx.json('Receipt does not belong to the user', 403);
       }
 
@@ -117,7 +117,7 @@ export class Receipt {
 
       const { walletAddress } = data.data;
 
-      const organizerWallet = receipt.event.organizerWallet;
+      const organizerWallet = receipt.event.organizerWallet as string;
 
       const contentHash = generateContentHash(
         receiptId,
