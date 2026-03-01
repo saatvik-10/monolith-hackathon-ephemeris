@@ -1,62 +1,83 @@
-import { NFTStorage } from 'nft.storage';
-
-const NFT_STORAGE_KEY = process.env.NFT_STORAGE_API_KEY!;
+const PINATA_JWT = process.env.PINATA_JWT!;
+const PINATA_UPLOAD_API = 'https://uploads.pinata.cloud/v3/files';
+const PINATA_GATEWAY = 'https://gateway.pinata.cloud/ipfs';
 
 export function validateIPFSConfig(): boolean {
-  if (!NFT_STORAGE_KEY) {
-    console.error('NFT_STORAGE_API_KEY not configured in .env');
+  if (!PINATA_JWT) {
+    console.error('PINATA_JWT not configured in .env');
     return false;
   }
-  console.log('IPFS storage configured');
+  console.log('IPFS storage configured (Pinata)');
   return true;
 }
 
+async function uploadToPinata(file: Blob, filename: string): Promise<string> {
+  const form = new FormData();
+  form.append('network', 'public');
+  form.append('file', file, filename);
+  form.append('name', filename);
+
+  const res = await fetch(PINATA_UPLOAD_API, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${PINATA_JWT}`,
+    },
+    body: form,
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Pinata upload failed (${res.status}): ${text}`);
+  }
+
+  const json = (await res.json()) as { data: { cid: string } };
+  return json.data.cid;
+}
+
 export async function uploadToIPFS(metadata: object): Promise<string> {
-  if (!NFT_STORAGE_KEY) {
-    throw new Error('NFT_STORAGE_API_KEY not configured.');
+  if (!PINATA_JWT) {
+    throw new Error('PINATA_JWT not configured.');
   }
 
   try {
-    const client = new NFTStorage({ token: NFT_STORAGE_KEY });
-
-    console.log('Uploading metadata to IPFS...');
-
-    const metadataJson = JSON.stringify(metadata);
-    const sizeInKB = Buffer.byteLength(metadataJson, 'utf-8') / 1024;
-
-    console.log(`Metadata size: ${sizeInKB.toFixed(2)} KB`);
-
-    // const blob = new Blob([metadataJson], { type: 'application/json' });
+    console.log('Uploading metadata to IPFS via Pinata...');
 
     const imageUrl = (metadata as any).image;
-    let imageBlob: Blob;
+    let imageCid: string | null = null;
 
-    try {
-      const imageResponse = await fetch(imageUrl);
-      imageBlob = await imageResponse.blob();
-    } catch (err) {
-      console.warn(`Failed to fetch ${imageUrl}, using placeholder`);
-      const placeholderResponse = await fetch(
-        'https://via.placeholder.com/400',
-      );
-      imageBlob = await placeholderResponse.blob();
+    if (
+      imageUrl &&
+      typeof imageUrl === 'string' &&
+      imageUrl.startsWith('http')
+    ) {
+      try {
+        const imageResponse = await fetch(imageUrl);
+        const imageBlob = await imageResponse.blob();
+        const ext = imageBlob.type.split('/')[1] ?? 'png';
+        imageCid = await uploadToPinata(imageBlob, `image.${ext}`);
+        console.log(`Image uploaded to IPFS: ${imageCid}`);
+      } catch (err) {
+        console.warn(`Failed to upload image to IPFS: ${err}`);
+      }
     }
 
-    const cid = await client.store({
-      name: (metadata as any).name || 'attendance-proof',
-      description: (metadata as any).description || 'Attendance Proof',
-      image: imageBlob,
-      properties: metadata,
+    const finalMetadata = imageCid
+      ? { ...(metadata as any), image: `ipfs://${imageCid}` }
+      : metadata;
+
+    const metadataBlob = new Blob([JSON.stringify(finalMetadata)], {
+      type: 'application/json',
     });
+    const cid = await uploadToPinata(metadataBlob, 'metadata.json');
 
     const ipfsUri = `ipfs://${cid}`;
-
+    console.log(`Metadata uploaded to IPFS: ${ipfsUri}`);
     return ipfsUri;
   } catch (err) {
     console.error('IPFS upload failed', err);
     throw new Error(
       `IPFS upload failed: ${
-        err instanceof Error ? err.message : 'Unknown err'
+        err instanceof Error ? err.message : 'Unknown error'
       }`,
     );
   }
@@ -66,36 +87,21 @@ export function getIPFSHttpUrl(ipfsUri: string): string {
   if (!ipfsUri.startsWith('ipfs://')) {
     throw new Error('Invalid IPFS URI format');
   }
-
   const cid = ipfsUri.replace('ipfs://', '');
-
-  return `https://nft.storage/ipfs/${cid}`;
+  return `${PINATA_GATEWAY}/${cid}`;
 }
 
 export async function verifyIPFSUri(ipfsUri: string): Promise<boolean> {
   try {
     const httpUrl = getIPFSHttpUrl(ipfsUri);
-
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 5000);
-
     const res = await fetch(httpUrl, { signal: controller.signal });
     clearTimeout(timeout);
-
-    if (!res.ok) {
-      console.error(`IPFS verification failed: HTTP ${res.status}`);
-      return false;
-    }
-
+    if (!res.ok) return false;
     const data = await res.json();
-
-    if (!data || typeof data !== 'object') {
-      console.error('IPFS URI does not contain valid JSON');
-      return false;
-    }
-
-    return true;
-  } catch (err) {
+    return data !== null && typeof data === 'object';
+  } catch {
     return false;
   }
 }
@@ -106,15 +112,9 @@ export async function getMetadataFromIPFS(
   try {
     const httpUrl = getIPFSHttpUrl(ipfsUri);
     const res = await fetch(httpUrl);
-
-    if (!res.ok) {
-      return null;
-    }
-
-    const metadata = await res.json();
-
-    return metadata as object;
-  } catch (err) {
+    if (!res.ok) return null;
+    return (await res.json()) as object;
+  } catch {
     return null;
   }
 }
