@@ -1,7 +1,8 @@
 import type { Context } from 'hono';
 import { prisma } from '../../prisma';
 import { eventSchema } from '../validators/event.validator';
-import { uploadImageToIPFS } from '../utils/ipfs';
+import { uploadImageToIPFS, uploadToIPFS } from '../utils/ipfs';
+import { createEventCollection } from '../utils/mint';
 
 export class Events {
   async createEvent(ctx: Context) {
@@ -33,6 +34,32 @@ export class Events {
           expiryWindow: data.data.expiryWindow,
         },
       });
+
+      if (data.data.nftEnabled && data.data.organizerWallet) {
+        try {
+          const collectionMetadataUri = await uploadToIPFS({
+            name: data.data.name,
+            description: `Official collection for ${data.data.name}`,
+            image: imageIpfsUri,
+          });
+
+          const collectionMintAddress = await createEventCollection(
+            data.data.name,
+            `Official collection for ${data.data.name}`,
+            collectionMetadataUri,
+            process.env.METAPLEX_WALLET_KEYPAIR!,
+          );
+
+          await prisma.event.update({
+            where: { id: newEvent.id },
+            data: { collectionMintAddress },
+          });
+
+          newEvent.collectionMintAddress = collectionMintAddress;
+        } catch (err) {
+          console.warn('Failed to create collection NFT:', err);
+        }
+      }
 
       return ctx.json(newEvent, 201);
     } catch (err) {
