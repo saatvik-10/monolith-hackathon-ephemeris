@@ -14,16 +14,17 @@ datasource db {
 }
 
 model Event {
-  id              String   @id @default(cuid())
-  name            String
-  image           String
-  startTime       DateTime
-  endTime         DateTime
-  nftEnabled      Boolean  @default(false)
-  nftPayer        String   @default("organizer")
-  organizerWallet String?
-  expiryWindow    Int
-  createdAt       DateTime @default(now())
+  id                    String   @id @default(cuid())
+  name                  String
+  image                 String
+  startTime             DateTime
+  endTime               DateTime
+  nftEnabled            Boolean  @default(false)
+  nftPayer              String   @default("organizer")
+  organizerWallet       String?
+  collectionMintAddress String?
+  expiryWindow          Int
+  createdAt             DateTime @default(now())
 
   identities Identity[]
   receipts   Receipt[]
