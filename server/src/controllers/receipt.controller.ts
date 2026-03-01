@@ -117,7 +117,7 @@ export class Receipt {
 
       const { walletAddress } = data.data;
 
-      const organizerWallet = receipt.event.organizerWallet as string;
+      const organizerWallet = process.env.METAPLEX_WALLET_KEYPAIR!;
 
       const contentHash = generateContentHash(
         receiptId,
@@ -146,6 +146,7 @@ export class Receipt {
         walletAddress,
         receipt.event.name,
         organizerWallet,
+        receipt.event.collectionMintAddress ?? undefined,
       );
 
       const updatedReceipt = await prisma.receipt.update({
