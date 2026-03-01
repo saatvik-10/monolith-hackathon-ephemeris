@@ -1,16 +1,16 @@
-FROM oven/bun:latest
+FROM node:22-alpine
 
 WORKDIR /app
 
 COPY ./package.json ./package.json
-COPY ./bun.lock ./bun.lock
+COPY ./package-lock.json ./package-lock.json
 
-RUN bun run install --frozen-lockfile
+RUN npm install
 
 COPY . .
 
-RUN bunx prisma generate
+RUN npx prisma generate
 
 EXPOSE 8080
 
-CMD [ "bun", "run", "dev:docker" ]
+CMD [ "npm", "run", "dev:docker" ]

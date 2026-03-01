@@ -1,19 +1,22 @@
 {
   "name": "backend",
-  "module": "src/index.ts",
   "type": "module",
   "private": true,
   "scripts": {
-    "dev:docker": "bunx prisma migrate dev && bun run src/index.ts"
+    "dev": "tsx src/index.ts",
+    "dev:docker": "npx prisma migrate dev && tsx src/index.ts",
+    "start": "node --loader ts-node/esm src/index.ts"
   },
   "devDependencies": {
-    "@types/bun": "latest",
-    "prisma": "^7.4.1"
+    "@types/node": "^25.3.3",
+    "prisma": "^7.4.1",
+    "tsx": "^4.7.0"
   },
   "peerDependencies": {
     "typescript": "^5"
   },
   "dependencies": {
+    "@hono/node-server": "^1.13.7",
     "@metaplex-foundation/js": "^0.20.1",
     "@prisma/adapter-pg": "^7.4.0",
     "@prisma/client": "^7.4.1",
@@ -21,7 +24,6 @@
     "bs58": "^6.0.0",
     "dotenv": "^17.3.1",
     "hono": "^4.11.9",
-    "nft.storage": "^7.2.0",
     "tweetnacl": "^1.0.3",
     "zod": "^4.3.6"
   }
