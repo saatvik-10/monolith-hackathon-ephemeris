@@ -1,8 +1,8 @@
 // This is an optional configuration file used primarily for debugging purposes when reporting issues.
 // It is safe to delete this file as it does not affect the functionality of your application.
 {
-  "cesVersion": "2.20.1",
-  "projectName": "my-expo-app",
+  "cesVersion": "2.21.3",
+  "projectName": "client",
   "packages": [
     {
       "name": "nativewind",
@@ -14,13 +14,13 @@
     "noInstall": false,
     "overwrite": false,
     "importAlias": true,
-    "packageManager": "bun",
+    "packageManager": "npm",
     "eas": false,
     "publish": false
   },
   "packageManager": {
-    "type": "bun",
-    "version": "1.3.8"
+    "type": "npm",
+    "version": "11.6.1"
   },
   "os": {
     "type": "Linux",

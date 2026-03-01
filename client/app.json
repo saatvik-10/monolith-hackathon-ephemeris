@@ -1,29 +1,31 @@
 {
   "expo": {
-    "name": "my-expo-app",
-    "slug": "my-expo-app",
+    "name": "client",
+    "slug": "client",
     "version": "1.0.0",
-    "scheme": "my-expo-app",
+    "scheme": "client",
+
     "web": {
       "favicon": "./assets/favicon.png"
     },
+
     "experiments": {
       "tsconfigPaths": true
     },
-    "plugins": [
-      "expo-router"
-    ],
+
+    "plugins": [],
+
     "orientation": "portrait",
     "icon": "./assets/icon.png",
+
     "userInterfaceStyle": "light",
+
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
