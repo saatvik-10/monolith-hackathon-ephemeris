@@ -8,11 +8,11 @@ export default function TabBar({
   navigation,
 }: BottomTabBarProps) {
   return (
-    <View className="absolute bottom-6 left-6 right-6">
+    <View className="absolute bottom-6 left-6 right-6 ">
       <BlurView
         intensity={100}
         tint="dark"
-        className="flex-row justify-between items-center px-6 py-4 rounded-3xl bg-white/5 border border-white/10 overflow-hidden"
+        className="flex-row justify-between items-center px-6 py-4 bg-white/5 border border-white/10 overflow-hidden"
       >
         {state.routes.map((route, index) => {
           const isFocused = state.index === index;
@@ -30,7 +30,7 @@ export default function TabBar({
                     : "text-white/60"
                 }`}
               >
-                {route.name}
+                {/* {route.name} */}  
               </Text>
             </TouchableOpacity>
           );
