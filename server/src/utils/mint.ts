@@ -8,7 +8,6 @@ interface MintNFTResult {
 
 export async function createEventCollection(
   eventName: string,
-  eventDescription: string,
   metadataUri: string,
   organizerPvtWalletKey: string,
 ): Promise<string> {
