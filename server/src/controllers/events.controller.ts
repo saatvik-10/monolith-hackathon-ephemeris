@@ -45,7 +45,6 @@ export class Events {
 
           const collectionMintAddress = await createEventCollection(
             data.data.name,
-            `Official collection for ${data.data.name}`,
             collectionMetadataUri,
             process.env.METAPLEX_WALLET_KEYPAIR!,
           );
