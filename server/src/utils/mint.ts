@@ -6,11 +6,30 @@ interface MintNFTResult {
   success: boolean;
 }
 
+export async function createEventCollection(
+  eventName: string,
+  eventDescription: string,
+  metadataUri: string,
+  organizerPvtWalletKey: string,
+): Promise<string> {
+  const metaplex = initializeMetaplex(organizerPvtWalletKey);
+
+  const { nft: collectionNft } = await metaplex.nfts().create({
+    uri: metadataUri,
+    name: eventName,
+    symbol: 'EVENT',
+    sellerFeeBasisPoints: 0,
+    isCollection: true,
+  });
+  return collectionNft.address.toBase58();
+}
+
 export async function mintNFT(
   metadataUri: string,
   recipientWallet: string,
   eventName: string,
   organizerPvtWalletKey: string,
+  collectionMintAddress?: string,
 ): Promise<MintNFTResult> {
   try {
     if (!metadataUri || !metadataUri.startsWith('ipfs://')) {
@@ -33,6 +52,9 @@ export async function mintNFT(
       symbol: 'PROOF',
       sellerFeeBasisPoints: 0,
       tokenOwner: receiptPublicKey,
+      collection: collectionMintAddress
+        ? new PublicKey(collectionMintAddress)
+        : undefined,
     });
 
     return {
