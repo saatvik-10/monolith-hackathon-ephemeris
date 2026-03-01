@@ -1,6 +1,7 @@
 import type { Context } from 'hono';
 import { prisma } from '../../prisma';
 import { eventSchema } from '../validators/event.validator';
+import { uploadImageToIPFS } from '../utils/ipfs';
 
 export class Events {
   async createEvent(ctx: Context) {
@@ -11,10 +12,20 @@ export class Events {
     }
 
     try {
+      let imageIpfsUri = data.data.image;
+      try {
+        imageIpfsUri = await uploadImageToIPFS(data.data.image);
+      } catch (err) {
+        console.warn(
+          'Failed to upload event image to IPFS, storing original URL:',
+          err,
+        );
+      }
+
       const newEvent = await prisma.event.create({
         data: {
           name: data.data.name,
-          image: data.data.image,
+          image: imageIpfsUri,
           startTime: new Date(data.data.startTime),
           endTime: new Date(data.data.endTime),
           organizerWallet: data.data.organizerWallet,

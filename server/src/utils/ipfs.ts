@@ -9,6 +9,21 @@ export function validateIPFSConfig(): boolean {
   return true;
 }
 
+export async function uploadImageToIPFS(imageUrl: string): Promise<string> {
+  if (!PINATA_JWT) throw new Error('PINATA_JWT not configured.');
+  if (imageUrl.startsWith('ipfs://')) return imageUrl;
+
+  const imageResponse = await fetch(imageUrl);
+  if (!imageResponse.ok)
+    throw new Error(`Failed to fetch image: ${imageResponse.status}`);
+
+  const imageBlob = await imageResponse.blob();
+  const ext = imageBlob.type.split('/')[1] ?? 'png';
+  const cid = await uploadToPinata(imageBlob, `image.${ext}`);
+  console.log(`Image uploaded to IPFS: ${cid}`);
+  return `ipfs://${cid}`;
+}
+
 export async function uploadToIPFS(metadata: object): Promise<string> {
   if (!PINATA_JWT) {
     throw new Error('PINATA_JWT not configured.');
@@ -18,26 +33,22 @@ export async function uploadToIPFS(metadata: object): Promise<string> {
     console.log('Uploading metadata to IPFS via Pinata...');
 
     const imageUrl = (metadata as any).image;
-    let imageCid: string | null = null;
+    let finalImage = imageUrl;
 
-    if (
-      imageUrl &&
-      typeof imageUrl === 'string' &&
-      imageUrl.startsWith('http')
-    ) {
-      try {
-        const imageResponse = await fetch(imageUrl);
-        const imageBlob = await imageResponse.blob();
-        const ext = imageBlob.type.split('/')[1] ?? 'png';
-        imageCid = await uploadToPinata(imageBlob, `image.${ext}`);
-        console.log(`Image uploaded to IPFS: ${imageCid}`);
-      } catch (err) {
-        console.warn(`Failed to upload image to IPFS: ${err}`);
+    if (imageUrl && typeof imageUrl === 'string') {
+      if (imageUrl.startsWith('ipfs://')) {
+        finalImage = imageUrl;
+      } else if (imageUrl.startsWith('http')) {
+        try {
+          finalImage = await uploadImageToIPFS(imageUrl);
+        } catch (err) {
+          console.warn(`Failed to upload image to IPFS: ${err}`);
+        }
       }
     }
 
-    const finalMetadata = imageCid
-      ? { ...(metadata as any), image: `ipfs://${imageCid}` }
+    const finalMetadata = finalImage
+      ? { ...(metadata as any), image: finalImage }
       : metadata;
 
     const metadataBlob = new Blob([JSON.stringify(finalMetadata)], {
