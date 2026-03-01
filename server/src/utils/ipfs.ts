@@ -1,4 +1,4 @@
-import { getIPFSHttpUrl, PINATA_JWT, uploadToPinata } from '../lib/pinata';
+import { getIPFSHttpUrl, PINATA_JWT, uploadToPinata } from '../helper/ipfs.helper';
 
 export function validateIPFSConfig(): boolean {
   if (!PINATA_JWT) {
