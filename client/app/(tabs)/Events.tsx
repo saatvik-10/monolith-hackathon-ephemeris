@@ -1,12 +1,19 @@
 import { View, Text } from "react-native";
-import '../global.css';
+import ScreenBackground from "../../components/ScreenBackground";
+import GlassCard from "../../components/GlassCard";
 
 const Events = () => {
   return (
-    <View className="flex-1 items-center justify-center bg-black">
-      <Text className="text-white text-xl">Events</Text>
-    </View>
+    <ScreenBackground>
+      <View className="flex-1 items-center justify-center">
+        <GlassCard>
+          <Text className="text-solana-text text-xl font-semibold text-center">
+            Events
+          </Text>
+        </GlassCard>
+      </View>
+    </ScreenBackground>
   );
-}
+};
 
-export default Events
+export default Events;
