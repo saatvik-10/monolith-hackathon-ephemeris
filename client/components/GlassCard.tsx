@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   inner: {
     backgroundColor: "rgba(19, 17, 28, 0.75)",
     borderRadius: 15,
-    padding: 20,
+    padding: 16,
   },
 });
 
