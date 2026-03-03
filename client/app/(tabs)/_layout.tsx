@@ -117,10 +117,9 @@ const TabLayout = () => {
 const styles = StyleSheet.create({
   glassWrapper: {
     flex: 1,
-    borderRadius: 35,
+    borderRadius: 20,
     overflow: "hidden",
 
-    // stronger frosted tint
     backgroundColor: "rgba(255,255,255,0.12)",
 
     borderWidth: 1,
