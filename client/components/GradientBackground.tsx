@@ -62,7 +62,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#0B0F19",
   },
 
-  /* ── Orbs ───────────────────────────────────────────── */
   orbPurpleTop: {
     position: "absolute",
     top: -height * 0.12,
@@ -91,12 +90,10 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
 
-  /* ── Vignette ───────────────────────────────────────── */
   vignette: {
     ...StyleSheet.absoluteFillObject,
   },
 
-  /* ── Content sits above everything ──────────────────── */
   content: {
     flex: 1,
     zIndex: 1,
