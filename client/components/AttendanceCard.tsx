@@ -1,4 +1,4 @@
-import { View, Text, Image, Pressable } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import GlassCard from "./GlassCard";
 
 type AttendanceCardProps = {
@@ -17,54 +17,43 @@ const AC2 = ({
   onVerify,
 }: AttendanceCardProps) => {
   return (
-    <GlassCard style={{ marginBottom: 12 }}>
-
+    <GlassCard className="mb-2">
       <View className="flex-row">
-
-        {/* Image */}
         <Image
           source={{ uri: image }}
-          className="w-24 h-28 rounded-xl"
+          className="w-24 h-24 rounded-xl"
           resizeMode="cover"
         />
-
-        {/* Right Section */}
-        <View className="flex-1 ml-4 justify-between">
-
-          {/* Text */}
+        <View className="flex-1 ml-4 flex-col justify-between">
           <View>
-            <Text className="text-white text-base font-semibold text-lg">
+            <Text className="text-white font-semibold text-lg">
               {name}
             </Text>
-
-            <Text className="text-white/60 text-sm mt-0">
+            <Text className="text-white/60 text-xs mt-0">
               {date}
             </Text>
           </View>
-
-          {/* Bottom Right Button */}
-          <View className="items-end mt-4">
-            <Pressable
+          <View className="items-end">
+            <TouchableOpacity
               disabled={!NFTEnabled}
               onPress={NFTEnabled ? onVerify : undefined}
-              className={`px-4 py-2 rounded-lg border ${
+              className={`px-2 py-1 rounded-lg border ${
                 NFTEnabled
-                  ? "border-green-500 bg-green-500/10"
-                  : "border-white/30"
+                  ? "border-solana-teal bg-solana-teal/10"
+                  : "border-solana-muted/30"
               }`}
             >
               <Text
                 className={`text-sm font-medium ${
                   NFTEnabled
-                    ? "text-green-400"
-                    : "text-white/40"
+                    ? "text-solana-teal"
+                    : "text-solana-muted"
                 }`}
               >
                 {NFTEnabled ? "Verify" : "Not verifiable"}
               </Text>
-            </Pressable>
+            </TouchableOpacity>
           </View>
-
         </View>
 
       </View>

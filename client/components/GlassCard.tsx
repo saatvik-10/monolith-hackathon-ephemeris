@@ -1,15 +1,15 @@
 import React from "react";
-import { View, StyleSheet, ViewStyle } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
 interface GlassCardProps {
   children: React.ReactNode;
-  style?: ViewStyle;
+  className?: string;
 }
 
-const GlassCard: React.FC<GlassCardProps> = ({ children, style }) => {
+const GlassCard: React.FC<GlassCardProps> = ({ children, className }) => {
   return (
-    <View style={[styles.outer, style]}>
+    <View style={styles.outer} className={className}>
       <LinearGradient
         colors={["rgba(153, 69, 255, 0.5)", "rgba(20, 241, 149, 0.3)"]}
         start={{ x: 0, y: 0 }}

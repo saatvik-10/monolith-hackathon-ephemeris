@@ -35,7 +35,7 @@ const Attendance = () => {
         contentContainerStyle={{
           paddingHorizontal: 16,
           paddingTop: 24,
-          paddingBottom: 120, // space for floating tab bar
+          paddingBottom: 120,
         }}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
