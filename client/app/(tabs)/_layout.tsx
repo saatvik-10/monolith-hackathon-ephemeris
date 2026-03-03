@@ -10,7 +10,6 @@ const TabLayout = () => {
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: true,
-
         tabBarLabelStyle: {
           fontSize: 10,
           fontWeight: "200",
@@ -26,7 +25,7 @@ const TabLayout = () => {
         tabBarStyle: {
           position: "absolute",
           bottom: 25,
-          marginHorizontal: 20,
+          marginHorizontal: 16,
           height: 70,
           backgroundColor: "transparent",
           borderTopWidth: 0,
@@ -119,7 +118,7 @@ const TabLayout = () => {
 const styles = StyleSheet.create({
   glassWrapper: {
     flex: 1,
-    borderRadius: 28,
+    borderRadius: 16,
     overflow: "hidden",
 
     backgroundColor: "rgba(255,255,255,0.12)",
