@@ -29,6 +29,7 @@ export class Events {
           image: imageIpfsUri,
           startTime: new Date(data.data.startTime),
           endTime: new Date(data.data.endTime),
+          organizerName: data.data.organizerName,
           organizerWallet: data.data.organizerWallet,
           nftEnabled: data.data.nftEnabled,
           expiryWindow: data.data.expiryWindow,
