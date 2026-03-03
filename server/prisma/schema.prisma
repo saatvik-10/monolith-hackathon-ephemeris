@@ -21,6 +21,7 @@ model Event {
   endTime               DateTime
   nftEnabled            Boolean  @default(false)
   nftPayer              String   @default("organizer")
+  organizerName         String
   organizerWallet       String?
   collectionMintAddress String?
   expiryWindow          Int
