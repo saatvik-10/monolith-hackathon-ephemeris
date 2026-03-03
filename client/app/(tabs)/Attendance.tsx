@@ -1,6 +1,7 @@
 import { FlatList } from "react-native";
 import ScreenBackground from "../../components/ScreenBackground";
 import AttendanceCard from "../../components/AttendanceCard";
+import { Heading } from "../../components/Heading";
 
 const attendanceData = [
   {
@@ -29,12 +30,12 @@ const attendanceData = [
 const Attendance = () => {
   return (
     <ScreenBackground>
+      <Heading title={"Attendance"} />
       <FlatList
         data={attendanceData}
         keyExtractor={(item) => item.id}
         contentContainerStyle={{
           paddingHorizontal: 16,
-          paddingTop: 24,
           paddingBottom: 120,
         }}
         showsVerticalScrollIndicator={false}
