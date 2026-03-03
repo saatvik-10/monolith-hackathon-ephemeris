@@ -1,30 +1,71 @@
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import "../global.css"
+import { BlurView } from "expo-blur";
+import { View, StyleSheet } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 
 const TabLayout = () => {
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: "#14F195",
-        tabBarInactiveTintColor: "#6B7280",
-        tabBarStyle: {
-          backgroundColor: "#0B0F19",
-          borderTopWidth: 0,
-          height: 70,
-          paddingBottom: 10,
+        tabBarShowLabel: true,
+
+        tabBarLabelStyle: {
+          fontSize: 10,
+          fontWeight: "200",
+          marginTop: 0,
+          marginBottom: -4,
         },
+
+        tabBarActiveTintColor: "#14F195",
+        tabBarInactiveTintColor: "rgba(255,255,255,0.5)",
+
+        tabBarStyle: {
+          position: "absolute",
+          bottom: 25,
+          marginHorizontal: 20,
+          height: 70,
+          backgroundColor: "transparent",
+          borderTopWidth: 0,
+          elevation: 0,
+        },
+
+        tabBarItemStyle: {
+          flex: 1,
+          alignItems: "center",
+          justifyContent: "center",
+          paddingVertical: 6,
+        },
+
+        tabBarBackground: () => (
+          <View style={styles.glassWrapper}>
+            <BlurView
+              intensity={100}
+              tint="dark"
+              style={StyleSheet.absoluteFill}
+            />
+
+            <LinearGradient
+              colors={[
+                "rgba(255,255,255,0.25)",
+                "rgba(255,255,255,0.05)"
+              ]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 0.75, y: 1 }}
+              style={StyleSheet.absoluteFill}
+            />
+          </View>
+        ),
       }}
     >
       <Tabs.Screen
         name="Events"
         options={{
-          title: "Events",
-          tabBarIcon: ({ color, size, focused }) => (
+          tabBarIcon: ({ color, focused }) => (
             <Ionicons
               name={focused ? "calendar" : "calendar-outline"}
-              size={size}
+              size={focused ? 26 : 22}
               color={color}
             />
           ),
@@ -34,11 +75,10 @@ const TabLayout = () => {
       <Tabs.Screen
         name="Attendance"
         options={{
-          title: "Attendance",
-          tabBarIcon: ({ color, size, focused }) => (
+          tabBarIcon: ({ color, focused }) => (
             <Ionicons
               name={focused ? "checkmark-circle" : "checkmark-circle-outline"}
-              size={size}
+              size={focused ? 26 : 22}
               color={color}
             />
           ),
@@ -48,11 +88,10 @@ const TabLayout = () => {
       <Tabs.Screen
         name="Proofs"
         options={{
-          title: "Proofs",
-          tabBarIcon: ({ color, size, focused }) => (
+          tabBarIcon: ({ color, focused }) => (
             <Ionicons
               name={focused ? "shield-checkmark" : "shield-checkmark-outline"}
-              size={size}
+              size={focused ? 26 : 22}
               color={color}
             />
           ),
@@ -62,11 +101,10 @@ const TabLayout = () => {
       <Tabs.Screen
         name="Receipts"
         options={{
-          title: "Receipts",
-          tabBarIcon: ({ color, size, focused }) => (
+          tabBarIcon: ({ color, focused }) => (
             <Ionicons
               name={focused ? "receipt" : "receipt-outline"}
-              size={size}
+              size={focused ? 26 : 22}
               color={color}
             />
           ),
@@ -75,5 +113,26 @@ const TabLayout = () => {
     </Tabs>
   );
 };
+
+const styles = StyleSheet.create({
+  glassWrapper: {
+    flex: 1,
+    borderRadius: 35,
+    overflow: "hidden",
+
+    // stronger frosted tint
+    backgroundColor: "rgba(255,255,255,0.12)",
+
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.15)",
+
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.4,
+    shadowRadius: 20,
+
+    elevation: 12,
+  },
+});
 
 export default TabLayout;
