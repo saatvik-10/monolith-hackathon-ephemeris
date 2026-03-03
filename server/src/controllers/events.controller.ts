@@ -117,4 +117,32 @@ export class Events {
       return ctx.json('Err getting event QR', 500);
     }
   }
+
+  async deleteEvent(ctx: Context) {
+    const eventId = ctx.req.param('eventId');
+    const currTime = new Date();
+
+    try {
+      const event = await prisma.event.findUnique({
+        where: { id: eventId },
+      });
+
+      if (!event) {
+        return ctx.json('Event not found', 404);
+      }
+
+      if (currTime <= event.endTime) {
+        return ctx.json('Event has not ended yet', 400);
+      }
+
+      await prisma.event.delete({
+        where: { id: eventId },
+      });
+
+      return ctx.json(eventId, 200);
+    } catch (err) {
+      console.error('Err deleting event', err);
+      return ctx.json('Err deleting event', 500);
+    }
+  }
 }
