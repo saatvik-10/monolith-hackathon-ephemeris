@@ -67,6 +67,10 @@ export function getEventQR(eventId: string): Promise<EventQRResponse> {
   return request<EventQRResponse>(`/events/${eventId}/qr`);
 }
 
+export function deleteEvent(eventId: string): Promise<string> {
+  return request<string>(`/events/${eventId}`, { method: 'DELETE' });
+}
+
 export function markAttendance(): Promise<AttendanceMarkResponse> {
   return request<AttendanceMarkResponse>(
     '/attendance/mark',
