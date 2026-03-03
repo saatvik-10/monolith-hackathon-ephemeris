@@ -9,7 +9,7 @@ type AttendanceCardProps = {
   onVerify?: () => void;
 };
 
-const AC2 = ({
+const AttendanceCard = ({
   name,
   date,
   image,
@@ -62,4 +62,4 @@ const AC2 = ({
   );
 };
 
-export default AC2;
+export default AttendanceCard;
