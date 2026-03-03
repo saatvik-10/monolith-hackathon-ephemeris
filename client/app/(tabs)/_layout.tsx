@@ -18,6 +18,8 @@ const TabLayout = () => {
           marginBottom: -4,
         },
 
+        sceneStyle: { backgroundColor: "transparent" },
+
         tabBarActiveTintColor: "#14F195",
         tabBarInactiveTintColor: "rgba(255,255,255,0.5)",
 
