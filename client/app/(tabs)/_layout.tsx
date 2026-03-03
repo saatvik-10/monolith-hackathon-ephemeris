@@ -75,7 +75,7 @@ const TabLayout = () => {
       />
 
       <Tabs.Screen
-        name="Attendance"
+        name="QR"
         options={{
           tabBarIcon: ({ color, focused }) => (
             <Ionicons
@@ -88,7 +88,7 @@ const TabLayout = () => {
       />
 
       <Tabs.Screen
-        name="Proofs"
+        name="Attendance"
         options={{
           tabBarIcon: ({ color, focused }) => (
             <Ionicons
@@ -101,7 +101,7 @@ const TabLayout = () => {
       />
 
       <Tabs.Screen
-        name="Receipts"
+        name="Proofs"
         options={{
           tabBarIcon: ({ color, focused }) => (
             <Ionicons
