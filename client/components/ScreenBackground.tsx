@@ -11,7 +11,7 @@ const ScreenBackground: React.FC<ScreenBackgroundProps> = ({ children }) => {
   return (
     <View className="flex-1 bg-transparent">
       <StatusBar style="light" />
-      <SafeAreaView className="flex-1 px-4">{children}</SafeAreaView>
+      <SafeAreaView className="flex-1">{children}</SafeAreaView>
     </View>
   );
 };
