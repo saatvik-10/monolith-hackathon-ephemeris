@@ -16,12 +16,9 @@ const TabLayout = () => {
           marginTop: 0,
           marginBottom: -4,
         },
-
         sceneStyle: { backgroundColor: "transparent" },
-
         tabBarActiveTintColor: "#14F195",
         tabBarInactiveTintColor: "rgba(255,255,255,0.5)",
-
         tabBarStyle: {
           position: "absolute",
           bottom: 25,
@@ -31,7 +28,6 @@ const TabLayout = () => {
           borderTopWidth: 0,
           elevation: 0,
         },
-
         tabBarItemStyle: {
           flex: 1,
           alignItems: "center",
@@ -40,11 +36,20 @@ const TabLayout = () => {
         },
 
         tabBarBackground: () => (
-          <View style={styles.glassWrapper}>
+          <View
+            className="flex-1 rounded-2xl overflow-hidden bg-white/[0.12] border border-white/[0.15]"
+            style={{
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 10 },
+              shadowOpacity: 0.4,
+              shadowRadius: 20,
+              elevation: 12,
+            }}
+          >
             <BlurView
               intensity={100}
               tint="dark"
-              style={StyleSheet.absoluteFill}
+              className="absolute inset-0"
             />
 
             <LinearGradient
@@ -114,25 +119,5 @@ const TabLayout = () => {
     </Tabs>
   );
 };
-
-const styles = StyleSheet.create({
-  glassWrapper: {
-    flex: 1,
-    borderRadius: 16,
-    overflow: "hidden",
-
-    backgroundColor: "rgba(255,255,255,0.12)",
-
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.15)",
-
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.4,
-    shadowRadius: 20,
-
-    elevation: 12,
-  },
-});
 
 export default TabLayout;

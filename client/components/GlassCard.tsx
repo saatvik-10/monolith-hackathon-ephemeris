@@ -9,34 +9,17 @@ interface GlassCardProps {
 
 const GlassCard: React.FC<GlassCardProps> = ({ children, className }) => {
   return (
-    <View style={styles.outer} className={className}>
+    <View className={`rounded-2xl p-px overflow-hidden ${className ?? ""}`}>
       <LinearGradient
         colors={["rgba(153, 69, 255, 0.5)", "rgba(20, 241, 149, 0.3)"]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
-        style={styles.borderGradient}
+        style={StyleSheet.absoluteFillObject}
       />
 
-      <View style={styles.inner}>{children}</View>
+      <View className="rounded-[15px] p-4 bg-[rgba(19,17,28,0.75)]">{children}</View>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  outer: {
-    borderRadius: 16,
-    padding: 1,
-    overflow: "hidden",
-  },
-  borderGradient: {
-    ...StyleSheet.absoluteFillObject,
-    borderRadius: 16,
-  },
-  inner: {
-    backgroundColor: "rgba(19, 17, 28, 0.75)",
-    borderRadius: 15,
-    padding: 16,
-  },
-});
 
 export default GlassCard;

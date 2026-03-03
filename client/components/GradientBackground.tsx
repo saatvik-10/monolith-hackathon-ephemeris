@@ -12,8 +12,8 @@ const GradientBackground: React.FC<GradientBackgroundProps> = ({
   children,
 }) => {
   return (
-    <View style={styles.container}>
-      <View style={styles.base} />
+    <View className="flex-1 bg-solana-dark">
+      <View className="absolute inset-0 bg-solana-dark" />
 
       <LinearGradient
         colors={["rgba(153, 69, 255, 0.35)", "rgba(153, 69, 255, 0)"]}
@@ -47,21 +47,12 @@ const GradientBackground: React.FC<GradientBackgroundProps> = ({
         end={{ x: 0.5, y: 1 }}
       />
 
-      <View style={styles.content}>{children}</View>
+      <View className="flex-1 z-[1]">{children}</View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#0B0F19",
-  },
-  base: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: "#0B0F19",
-  },
-
   orbPurpleTop: {
     position: "absolute",
     top: -height * 0.12,
@@ -92,11 +83,6 @@ const styles = StyleSheet.create({
 
   vignette: {
     ...StyleSheet.absoluteFillObject,
-  },
-
-  content: {
-    flex: 1,
-    zIndex: 1,
   },
 });
 
