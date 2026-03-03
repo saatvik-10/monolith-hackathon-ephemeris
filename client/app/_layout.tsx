@@ -1,13 +1,16 @@
-import { Stack } from 'expo-router';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import './global.css';
+import "./global.css";
+import { Stack } from "expo-router";
+import GradientBackground from "../components/GradientBackground";
 
-const RootLayout = () => {
+export default function RootLayout() {
   return (
-    <SafeAreaProvider>
-      <Stack screenOptions={{ headerShown: false }} />
-    </SafeAreaProvider>
+    <GradientBackground>
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: { backgroundColor: "transparent" },
+        }}
+      />
+    </GradientBackground>
   );
-};
-
-export default RootLayout;
+}

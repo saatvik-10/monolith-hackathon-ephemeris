@@ -10,11 +10,13 @@ const TabLayout = () => {
         tabBarActiveTintColor: "#14F195",
         tabBarInactiveTintColor: "#6B7280",
         tabBarStyle: {
-          backgroundColor: "#0B0F19",
-          borderTopWidth: 0,
+          backgroundColor: "rgba(11, 15, 25, 0.85)",
+          borderTopWidth: 0.5,
+          borderTopColor: "rgba(153, 69, 255, 0.2)",
           height: 70,
           paddingBottom: 10,
         },
+        sceneStyle: { backgroundColor: "transparent" },
       }}
     >
       <Tabs.Screen
