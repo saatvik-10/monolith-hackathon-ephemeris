@@ -5,6 +5,7 @@ export const eventSchema = z.object({
   image: z.url('Event image must be a valid URL'),
   startTime: z.iso.datetime('Start time must be ISO datetime'),
   endTime: z.iso.datetime('End time must be ISO datetime'),
+  location: z.string('Event location is required'),
   organizerName: z.string(),
   organizerWallet: z.string().optional(),
   nftEnabled: z.boolean().optional().default(false),
