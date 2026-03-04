@@ -1,5 +1,5 @@
 import { View, Text, Image, TouchableOpacity } from "react-native";
-import GlassCard from "./GlassCard";
+import GlassCard from "../common/GlassCard";
 
 type AttendanceCardProps = {
   name: string;
