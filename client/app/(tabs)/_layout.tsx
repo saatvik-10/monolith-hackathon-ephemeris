@@ -22,7 +22,7 @@ const TabLayout = () => {
         tabBarStyle: {
           position: "absolute",
           bottom: 25,
-          marginHorizontal: 16,
+          marginHorizontal: 72,
           height: 70,
           backgroundColor: "transparent",
           borderTopWidth: 0,
@@ -37,7 +37,7 @@ const TabLayout = () => {
 
         tabBarBackground: () => (
           <View
-            className="flex-1 rounded-2xl overflow-hidden bg-white/[0.12] border border-white/[0.15]"
+            className="flex-1 rounded-3xl overflow-hidden bg-white/[0.12] border border-white/[0.15]"
             style={{
               shadowColor: "#000",
               shadowOffset: { width: 0, height: 10 },
@@ -71,19 +71,6 @@ const TabLayout = () => {
           tabBarIcon: ({ color, focused }) => (
             <Ionicons
               name={focused ? "calendar" : "calendar-outline"}
-              size={focused ? 26 : 22}
-              color={color}
-            />
-          ),
-        }}
-      />
-
-      <Tabs.Screen
-        name="QR"
-        options={{
-          tabBarIcon: ({ color, focused }) => (
-            <Ionicons
-              name={focused ? "checkmark-circle" : "checkmark-circle-outline"}
               size={focused ? 26 : 22}
               color={color}
             />
