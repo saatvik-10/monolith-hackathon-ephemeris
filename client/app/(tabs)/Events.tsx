@@ -1,16 +1,13 @@
-import { View, Text } from "react-native";
-import ScreenBackground from "../../components/ScreenBackground";
-import GlassCard from "../../components/GlassCard";
+import { View } from 'react-native';
+import ScreenBackground from '../../components/screen/ScreenBackground';
+import { Heading } from '@/components/common/Heading';
 
 const Events = () => {
   return (
     <ScreenBackground>
+      <Heading title="Events" />
       <View className="flex-1 items-center justify-center">
-        <GlassCard>
-          <Text className="text-solana-text text-xl font-semibold text-center">
-            Events
-          </Text>
-        </GlassCard>
+        
       </View>
     </ScreenBackground>
   );
