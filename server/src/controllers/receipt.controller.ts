@@ -1,7 +1,11 @@
 import type { Context } from 'hono';
 import { prisma } from '../../prisma';
 import { nftMintSchema, receiptSchema } from '../validators/receipt.validator';
-import { signProof } from '../lib/signature';
+import {
+  signProof,
+  verifySign,
+  type ReceiptProofPayload,
+} from '../lib/signature';
 import { generateContentHash } from '../lib/hash';
 import { mintNFT } from '../utils/mint';
 import { uploadToIPFS } from '../utils/ipfs';
@@ -100,7 +104,7 @@ export class Receipt {
         where: {
           id: receiptId,
         },
-        include: { event: true, identity: true },
+        include: { event: true, identity: true, proof: true },
       });
 
       if (!receipt) {
@@ -109,6 +113,23 @@ export class Receipt {
 
       if (receipt.identityId !== identity.id) {
         return ctx.json('Receipt does not belong to the user', 403);
+      }
+
+      if (!receipt.proof) {
+        return ctx.json('No proof found for this receipt', 404);
+      }
+
+      const isProofValid = verifySign(
+        receipt.proof.payload as ReceiptProofPayload,
+        receipt.proof.signature,
+      );
+
+      if (!isProofValid) {
+        return ctx.json('Receipt proof verification failed', 400);
+      }
+
+      if (receipt.proof.expiresAt < new Date()) {
+        return ctx.json('Receipt proof expired', 410);
       }
 
       if (receipt.nftMinted) {
