@@ -19,6 +19,7 @@ model Event {
   image                 String
   startTime             DateTime
   endTime               DateTime
+  location              String
   nftEnabled            Boolean  @default(false)
   nftPayer              String   @default("organizer")
   organizerName         String
