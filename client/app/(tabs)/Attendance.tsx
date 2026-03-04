@@ -1,7 +1,7 @@
 import { FlatList } from "react-native";
-import ScreenBackground from "../../components/ScreenBackground";
-import AttendanceCard from "../../components/AttendanceCard";
-import { Heading } from "../../components/Heading";
+import ScreenBackground from "../../components/screen/ScreenBackground";
+import AttendanceCard from "../../components/attendance/AttendanceCard";
+import { Heading } from "../../components/common/Heading";
 
 const attendanceData = [
   {

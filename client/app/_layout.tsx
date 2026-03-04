@@ -1,6 +1,6 @@
 import "./global.css";
 import { Stack } from "expo-router";
-import GradientBackground from "../components/GradientBackground";
+import GradientBackground from "../components/screen/GradientBackground";
 
 export default function RootLayout() {
   return (

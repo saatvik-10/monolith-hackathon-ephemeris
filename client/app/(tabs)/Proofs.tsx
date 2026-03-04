@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
-import ScreenBackground from "../../components/ScreenBackground";
-import GlassCard from "../../components/GlassCard";
+import ScreenBackground from "../../components/screen/ScreenBackground";
+import GlassCard from "../../components/common/GlassCard";
 
 const Proofs = () => {
   return (
