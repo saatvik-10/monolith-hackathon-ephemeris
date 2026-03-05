@@ -17,7 +17,7 @@ const EventCard = ({ id, name, startDate, location, image, onPress }: EventCardP
         <Image source={{ uri: image }} className="absolute h-full w-full" resizeMode="cover" />
 
         <Text className="absolute right-2 top-2 rounded-xl bg-black/50 px-3 py-2 backdrop-blur">
-          <Text className="text-md font-semibold text-solana-teal">{location}</Text>
+          <Text className="text-lg font-semibold text-solana-teal">{location}</Text>
         </Text>
 
         <LinearGradient
