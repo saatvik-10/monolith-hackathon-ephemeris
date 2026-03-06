@@ -50,7 +50,7 @@ const EventModal = ({ visible, onClose, event, onEdit, canEdit = false }: EventM
             />
           </View>
 
-          <BlurView className="inset-0 h-full px-4" tint="dark">
+          <BlurView className="inset-0 h-full px-4" tint="dark" intensity={100}>
             <LinearGradient
               colors={['transparent', 'rgba(11, 15, 25, 0.75)', 'rgba(255, 255, 255, 0.3)']}
               start={{ x: 0, y: 0 }}
