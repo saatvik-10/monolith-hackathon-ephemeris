@@ -94,7 +94,7 @@ const EventModal = ({ visible, onClose, event, onEdit, canEdit = false }: EventM
                         {event.location}
                       </Text>
 
-                      <Ionicons
+                      <Ionicons 
                         name="open-outline"
                         size={14}
                         color="#14F195"
@@ -104,7 +104,7 @@ const EventModal = ({ visible, onClose, event, onEdit, canEdit = false }: EventM
                   </View>
                 </View>
 
-                <View className="flex-row items-center border-t border-white/10 pt-2">
+                <View className="flex-row items-center border-t border-white/10 pt-2 mt-2">
                   <View className="flex-1">
                     <Text className="mb-1 text-xs text-white/60">Organizer</Text>
                     <Text className="text-base font-semibold text-white">{event.creatorName}</Text>
