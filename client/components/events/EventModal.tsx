@@ -111,7 +111,7 @@ const EventModal = ({ visible, onClose, event, onEdit, canEdit = false }: EventM
                   <View className="flex-1 items-end">
                     <Text className="mb-1 text-xs text-white/60">NFT Certificate</Text>
                     <Text
-                      className={`text-sm font-semibold ${
+                      className={`text-base font-semibold ${
                         event.nftEnabled ? 'text-solana-teal' : 'text-solana-muted'
                       }`}>
                       {event.nftEnabled ? '✓ Enabled' : 'Disabled'}
