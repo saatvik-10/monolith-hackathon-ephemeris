@@ -26,10 +26,10 @@ const AttendanceCard = ({
         />
         <View className="flex-1 ml-4 flex-col justify-between">
           <View>
-            <Text className="text-white font-semibold text-lg">
+            <Text className="text-white font-bold text-xl">
               {name}
             </Text>
-            <Text className="text-white/60 text-xs mt-0">
+            <Text className="text-solana-teal text-sm mt-0">
               {date}
             </Text>
           </View>
