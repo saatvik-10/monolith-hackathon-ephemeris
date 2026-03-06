@@ -10,6 +10,7 @@ type Event = {
   name: string;
   startDate: string;
   location: string;
+  locationURL: string;
   image: string;
   description: string;
   creatorName: string;
@@ -23,6 +24,7 @@ const eventsData: Event[] = [
     name: 'Hackathon 2026',
     startDate: '12 March 2026',
     location: 'Delhi',
+    locationURL: 'https://maps.google.com/?q=India+Gate+New+Delhi',
     image: 'https://picsum.photos/600/400?random=1',
     description:
       'Join us for an exciting 24-hour hackathon where developers, designers, and innovators come together to build the next big thing. Network with industry experts and showcase your skills!',
@@ -34,6 +36,7 @@ const eventsData: Event[] = [
     name: 'Web3 Bootcamp',
     startDate: '28 February 2026',
     location: 'Mumbai',
+    locationURL: 'https://maps.google.com/?q=Gateway+of+India+Mumbai',
     image: 'https://picsum.photos/600/400?random=2',
     description:
       'A comprehensive 4-week bootcamp covering blockchain basics, smart contracts, DeFi protocols, and hands-on development. Perfect for beginners to advanced developers.',
@@ -45,6 +48,7 @@ const eventsData: Event[] = [
     name: 'AI Workshop',
     startDate: '5 January 2026',
     location: 'Pune',
+    locationURL: 'https://maps.google.com/?q=Shaniwar+Wada+Pune',
     image: 'https://picsum.photos/600/400?random=3',
     description:
       'Explore the cutting edge of artificial intelligence with practical workshops on machine learning, neural networks, and real-world applications. Limited seats available!',
@@ -56,6 +60,7 @@ const eventsData: Event[] = [
     name: 'Solana Developer Summit',
     startDate: '15 April 2026',
     location: 'Ahemdabad',
+    locationURL: 'https://maps.google.com/?q=Sabarmati+Riverfront+Ahmedabad',
     image: 'https://picsum.photos/600/400?random=4',
     description:
       'Meet Solana developers worldwide and learn about the latest tools, frameworks, and best practices. Includes technical talks and networking sessions.',
@@ -67,6 +72,7 @@ const eventsData: Event[] = [
     name: 'Design Thinking Masterclass',
     startDate: '22 March 2026',
     location: 'Noida',
+    locationURL: 'https://maps.google.com/?q=Okhla+Bird+Sanctuary+Noida',
     image: 'https://picsum.photos/600/400?random=5',
     description:
       'Master the art of design thinking and user-centric development. Learn frameworks, methodologies, and tools used by leading companies.',

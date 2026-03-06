@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, View, Text, Image, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import { Modal, View, Text, Image, TouchableOpacity, ScrollView, StyleSheet, Linking } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import GlassCard from '../common/GlassCard';
 import { Ionicons } from '@expo/vector-icons';
@@ -15,6 +15,7 @@ type EventModalProps = {
     description: string;
     startDate: string;
     location: string;
+    locationURL: string
     creatorName: string;
     nftEnabled: boolean;
   } | null;
@@ -27,17 +28,16 @@ const EventModal = ({ visible, onClose, event, onEdit, canEdit = false }: EventM
 
   return (
     <Modal visible={visible} animationType="slide" transparent={true} onRequestClose={onClose}>
-      <View className="flex-1 bg-black/60">
+      <View className="flex-1 bg-black/60 rounded-t-3xl justify-end">
         <ScrollView
           showsVerticalScrollIndicator={false}
-          className="flex-1"
+          className="flex-1 rounded-t-3xl overflow-hidden"
           contentContainerStyle={{ paddingBottom: 20 }}>
           <TouchableOpacity
             onPress={onClose}
-            className="absolute right-4 top-8 z-10 rounded-full bg-solana-teal/20 p-2">
-            <Text className="h-6 w-6 text-center text-2xl font-bold text-white">
-              <Ionicons name="close" size={24} />
-            </Text>
+            className="absolute right-4 top-4 z-10 h-10 w-10 items-center justify-center rounded-full bg-gray-600"
+          >
+            <Ionicons name="close" size={22} color="white" />
           </TouchableOpacity>
 
           <View className="relative h-80 w-full">
@@ -50,9 +50,9 @@ const EventModal = ({ visible, onClose, event, onEdit, canEdit = false }: EventM
             />
           </View>
 
-          <BlurView className="inset-0 h-full px-4" tint="dark">
+          <BlurView className="inset-0 h-full px-4 " tint="dark" intensity={100}>
             <LinearGradient
-              colors={['transparent', 'rgba(11, 15, 25, 0.75)', 'rgba(255, 255, 255, 0.3)']}
+              colors={['rgba(19, 17, 28, 1)', 'rgba(11, 15, 25, 0.75)', 'rgba(255, 255, 255, 0.3)']}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={StyleSheet.absoluteFillObject}
@@ -84,11 +84,26 @@ const EventModal = ({ visible, onClose, event, onEdit, canEdit = false }: EventM
                   </View>
                   <View className="items-end">
                     <Text className="mb-1 text-xs text-white/60">Location</Text>
-                    <Text className="text-base font-semibold text-white">{event.location}</Text>
+
+                    <TouchableOpacity
+                      onPress={() => Linking.openURL(event.locationURL)}
+                      className="flex-row items-center"
+                    >
+                      <Text className="text-base font-semibold text-solana-teal underline">
+                        {event.location}
+                      </Text>
+
+                      <Ionicons 
+                        name="open-outline"
+                        size={14}
+                        color="#14F195"
+                        style={{ marginLeft: 4 }}
+                      />
+                    </TouchableOpacity>
                   </View>
                 </View>
 
-                <View className="flex-row items-center border-t border-white/10 pt-2">
+                <View className="flex-row items-center border-t border-white/10 pt-2 mt-2">
                   <View className="flex-1">
                     <Text className="mb-1 text-xs text-white/60">Organizer</Text>
                     <Text className="text-base font-semibold text-white">{event.creatorName}</Text>
@@ -96,7 +111,7 @@ const EventModal = ({ visible, onClose, event, onEdit, canEdit = false }: EventM
                   <View className="flex-1 items-end">
                     <Text className="mb-1 text-xs text-white/60">NFT Certificate</Text>
                     <Text
-                      className={`text-sm font-semibold ${
+                      className={`text-base font-semibold ${
                         event.nftEnabled ? 'text-solana-teal' : 'text-solana-muted'
                       }`}>
                       {event.nftEnabled ? '✓ Enabled' : 'Disabled'}
