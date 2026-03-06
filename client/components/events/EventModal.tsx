@@ -1,10 +1,9 @@
 import React from 'react';
-import { Modal, View, Text, Image, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import { Modal, View, Text, Image, TouchableOpacity, ScrollView, StyleSheet, Linking } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import GlassCard from '../common/GlassCard';
 import { Ionicons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
-import { Linking } from 'react-native';
 
 type EventModalProps = {
   visible: boolean;
@@ -51,9 +50,9 @@ const EventModal = ({ visible, onClose, event, onEdit, canEdit = false }: EventM
             />
           </View>
 
-          <BlurView className="inset-0 h-full px-4 bg-black" tint="dark" intensity={100}>
+          <BlurView className="inset-0 h-full px-4 " tint="dark" intensity={100}>
             <LinearGradient
-              colors={['transparent', 'rgba(11, 15, 25, 0.75)', 'rgba(255, 255, 255, 0.3)']}
+              colors={['rgba(19, 17, 28, 1)', 'rgba(11, 15, 25, 0.75)', 'rgba(255, 255, 255, 0.3)']}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={StyleSheet.absoluteFillObject}
