@@ -4,6 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import GlassCard from '../common/GlassCard';
 import { Ionicons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
+import { Linking } from 'react-native';
 
 type EventModalProps = {
   visible: boolean;
@@ -15,6 +16,7 @@ type EventModalProps = {
     description: string;
     startDate: string;
     location: string;
+    locationURL: string
     creatorName: string;
     nftEnabled: boolean;
   } | null;
@@ -34,10 +36,9 @@ const EventModal = ({ visible, onClose, event, onEdit, canEdit = false }: EventM
           contentContainerStyle={{ paddingBottom: 20 }}>
           <TouchableOpacity
             onPress={onClose}
-            className="absolute right-4 top-8 z-10 rounded-full bg-solana-teal/20 p-2">
-            <Text className="h-6 w-6 text-center text-2xl font-bold text-white">
-              <Ionicons name="close" size={24} />
-            </Text>
+            className="absolute right-4 top-8 z-10 h-10 w-10 items-center justify-center rounded-full bg-solana-teal/20"
+          >
+            <Ionicons name="close" size={22} color="white" />
           </TouchableOpacity>
 
           <View className="relative h-80 w-full">
@@ -50,7 +51,7 @@ const EventModal = ({ visible, onClose, event, onEdit, canEdit = false }: EventM
             />
           </View>
 
-          <BlurView className="inset-0 h-full px-4" tint="dark" intensity={100}>
+          <BlurView className="inset-0 h-full px-4 bg-black" tint="dark" intensity={100}>
             <LinearGradient
               colors={['transparent', 'rgba(11, 15, 25, 0.75)', 'rgba(255, 255, 255, 0.3)']}
               start={{ x: 0, y: 0 }}
@@ -84,7 +85,22 @@ const EventModal = ({ visible, onClose, event, onEdit, canEdit = false }: EventM
                   </View>
                   <View className="items-end">
                     <Text className="mb-1 text-xs text-white/60">Location</Text>
-                    <Text className="text-base font-semibold text-white">{event.location}</Text>
+
+                    <TouchableOpacity
+                      onPress={() => Linking.openURL(event.locationURL)}
+                      className="flex-row items-center"
+                    >
+                      <Text className="text-base font-semibold text-solana-teal underline">
+                        {event.location}
+                      </Text>
+
+                      <Ionicons
+                        name="open-outline"
+                        size={14}
+                        color="#14F195"
+                        style={{ marginLeft: 4 }}
+                      />
+                    </TouchableOpacity>
                   </View>
                 </View>
 
