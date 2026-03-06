@@ -28,14 +28,14 @@ const EventModal = ({ visible, onClose, event, onEdit, canEdit = false }: EventM
 
   return (
     <Modal visible={visible} animationType="slide" transparent={true} onRequestClose={onClose}>
-      <View className="flex-1 bg-black/60">
+      <View className="flex-1 bg-black/60 rounded-t-3xl justify-end">
         <ScrollView
           showsVerticalScrollIndicator={false}
-          className="flex-1"
+          className="flex-1 rounded-t-3xl overflow-hidden"
           contentContainerStyle={{ paddingBottom: 20 }}>
           <TouchableOpacity
             onPress={onClose}
-            className="absolute right-4 top-8 z-10 h-10 w-10 items-center justify-center rounded-full bg-solana-teal/20"
+            className="absolute right-4 top-4 z-10 h-10 w-10 items-center justify-center rounded-full bg-gray-600"
           >
             <Ionicons name="close" size={22} color="white" />
           </TouchableOpacity>
