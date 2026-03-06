@@ -30,6 +30,7 @@ export class Events {
           startTime: new Date(data.data.startTime),
           endTime: new Date(data.data.endTime),
           location: data.data.location,
+          locationURL: data.data.locationURL,
           organizerName: data.data.organizerName,
           organizerWallet: data.data.organizerWallet,
           nftEnabled: data.data.nftEnabled,
