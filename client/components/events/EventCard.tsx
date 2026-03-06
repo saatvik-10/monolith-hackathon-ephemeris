@@ -13,11 +13,11 @@ type EventCardProps = {
 const EventCard = ({ id, name, startDate, location, image, onPress }: EventCardProps) => {
   return (
     <TouchableOpacity onPress={() => onPress(id)} className="mb-4">
-      <View className="relative h-72 overflow-hidden rounded-2xl border">
+      <View className="relative h-60 overflow-hidden rounded-2xl border">
         <Image source={{ uri: image }} className="absolute h-full w-full" resizeMode="cover" />
 
         <Text className="absolute right-2 top-2 rounded-xl bg-black/50 px-3 py-2 backdrop-blur">
-          <Text className="text-lg font-semibold text-solana-teal">{location}</Text>
+          <Text className="text-sm font-semibold text-solana-teal">{location}</Text>
         </Text>
 
         <LinearGradient
@@ -35,10 +35,10 @@ const EventCard = ({ id, name, startDate, location, image, onPress }: EventCardP
         />
 
         <View className="absolute bottom-0 left-0 right-0 p-4">
-          <Text numberOfLines={2} className="mb-0 text-3xl font-bold text-white">
+          <Text numberOfLines={2} className="mb-0 text-2xl font-bold text-white">
             {name}
           </Text>
-          <Text className="text-base font-medium text-solana-teal">{startDate}</Text>
+          <Text className="text-sm font-medium text-solana-teal">{startDate}</Text>
         </View>
       </View>
     </TouchableOpacity>
