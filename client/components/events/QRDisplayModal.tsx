@@ -4,6 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { Modal, ScrollView, Share, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
+import * as Linking from 'expo-linking';
 
 type QRDisplayModalProps = {
   visible: boolean;
@@ -14,7 +15,7 @@ type QRDisplayModalProps = {
 const QRDisplayModal = ({ visible, event, onClose }: QRDisplayModalProps) => {
   if (!event) return null;
 
-  const qrValue = `ephemeris:attend:${event.id}`;
+  const qrValue = Linking.createURL(`attend/${event.id}`);
 
   const handleShare = () => {
     Share.share({ message: `Attend "${event.name}" — QR: ${qrValue}` });
