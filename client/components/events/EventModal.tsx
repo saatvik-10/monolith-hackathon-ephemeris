@@ -23,6 +23,8 @@ type EventModalProps = {
     image: string;
     description: string;
     startDate: string;
+    startTime: string;
+    endTime: string;
     location: string;
     locationURL: string;
     creatorName: string;
@@ -155,13 +157,26 @@ const EventModal = ({
                   </View>
                 </View>
 
-                <View className="mt-2 flex-row items-center border-t border-white/10 pt-2">
+                {(event.startTime || event.endTime) && (
+                  <View className="mt-2 flex-row items-center border-t border-solana-text/10 pt-2">
+                    <View>
+                      <Text className="mb-1 text-xs text-solana-text/60">Time</Text>
+                      <Text className="text-base font-semibold text-solana-teal">
+                        {event.startTime}
+                        {event.endTime}
+                      </Text>
+                    </View>
+                  </View>
+                )}
+                <View className="mt-2 flex-row items-center border-t border-solana-text/10 pt-2">
                   <View className="flex-1">
-                    <Text className="mb-1 text-xs text-white/60">Organizer</Text>
-                    <Text className="text-base font-semibold text-white">{event.creatorName}</Text>
+                    <Text className="mb-1 text-xs text-solana-text/60">Organizer</Text>
+                    <Text className="text-base font-semibold text-solana-text">
+                      {event.creatorName}
+                    </Text>
                   </View>
                   <View className="flex-1 items-end">
-                    <Text className="mb-1 text-xs text-white/60">NFT Certificate</Text>
+                    <Text className="mb-1 text-xs text-solana-text/60">NFT Certificate</Text>
                     <Text
                       className={`text-base font-semibold ${
                         event.nftEnabled ? 'text-solana-teal' : 'text-solana-muted'
@@ -175,8 +190,8 @@ const EventModal = ({
 
             <GlassCard className="mb-6">
               <View>
-                <Text className="mb-2 text-xs font-medium text-white/60">Description</Text>
-                <Text className="text-base leading-5 text-white opacity-90">
+                <Text className="mb-2 text-xs font-medium text-solana-text/60">Description</Text>
+                <Text className="text-base leading-5 text-solana-text opacity-90">
                   {event.description}
                 </Text>
               </View>
