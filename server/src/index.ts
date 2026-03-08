@@ -11,7 +11,11 @@ const app = new Hono();
 app.use(logger());
 app.use(cors());
 
+app.get('/health', (c) => c.json({ status: 'ok' }, 200));
+
 app.route('/api', router);
+
+app.route;
 
 app.notFound((c) => {
   return c.json({ err: 'Page Not Found' }, 404);
