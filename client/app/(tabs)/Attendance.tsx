@@ -28,14 +28,11 @@ const Attendance = () => {
   const handleVerify = async (event: AttendedEvent) => {
     let walletAddress = pubkey;
 
-    // Prompt wallet connection if not connected
     if (!walletAddress) {
       try {
         await connect();
         walletAddress = useWalletStore.getState().pubkey;
-      } catch {
-        // connect failed silently
-      }
+      } catch {}
 
       if (!walletAddress) {
         Alert.alert(
@@ -76,8 +73,8 @@ const Attendance = () => {
         'Attendance Verified!',
         'Your NFT has been minted. Check the Proofs tab to see it.'
       );
-    } catch (err: any) {
-      Alert.alert('Error', err?.message ?? 'Failed to verify attendance');
+    } catch {
+      Alert.alert('Error', 'Failed to verify attendance');
     } finally {
       setVerifyingId(null);
     }
