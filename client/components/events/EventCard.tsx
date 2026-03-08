@@ -20,7 +20,6 @@ const EventCard = ({ id, name, startDate, location, image, onPress }: EventCardP
           <Text className="text-sm font-semibold text-solana-teal">{location}</Text>
         </Text>
 
-
         <LinearGradient
           colors={['transparent', 'rgba(0, 0, 0, 0.35)', 'rgba(0, 0, 0, 0.7)']}
           locations={[0, 0.25, 1]}
