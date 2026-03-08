@@ -1,15 +1,15 @@
-import './global.css';
+import { useWalletStore } from '@/components/store/walletStore';
 import { Stack } from 'expo-router';
-import GradientBackground from '../components/screen/GradientBackground';
-// import { useWalletStore } from '@/components/store/walletStore';
 import { useEffect } from 'react';
+import GradientBackground from '../components/screen/GradientBackground';
+import './global.css';
 
 export default function RootLayout() {
-  // const restoreWallet = useWalletStore((st) => st.restoreWallet);
+  const restoreWallet = useWalletStore((st) => st.restoreWallet);
 
-  // useEffect(() => {
-  //   restoreWallet();
-  // }, [restoreWallet]);
+  useEffect(() => {
+    restoreWallet();
+  }, [restoreWallet]);
 
   return (
     <GradientBackground>
