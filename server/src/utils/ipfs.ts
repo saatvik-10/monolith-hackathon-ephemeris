@@ -13,6 +13,20 @@ export async function uploadImageToIPFS(imageUrl: string): Promise<string> {
   if (!PINATA_JWT) throw new Error('PINATA_JWT not configured.');
   if (imageUrl.startsWith('ipfs://')) return imageUrl;
 
+  // Handle base64 data URIs from mobile clients
+  if (imageUrl.startsWith('data:')) {
+    const matches = imageUrl.match(/^data:([^;]+);base64,(.+)$/s);
+    if (!matches || !matches[1] || !matches[2]) throw new Error('Invalid data URI format');
+    const mimeType = matches[1];
+    const base64Data = matches[2];
+    const raw = Buffer.from(base64Data, 'base64');
+    const imageBlob = new Blob([new Uint8Array(raw.buffer, raw.byteOffset, raw.byteLength)], { type: mimeType });
+    const ext = mimeType.split('/')[1] ?? 'png';
+    const cid = await uploadToPinata(imageBlob, `image.${ext}`);
+    console.log(`Image uploaded to IPFS from base64: ${cid}`);
+    return `ipfs://${cid}`;
+  }
+
   const imageResponse = await fetch(imageUrl);
   if (!imageResponse.ok)
     throw new Error(`Failed to fetch image: ${imageResponse.status}`);
