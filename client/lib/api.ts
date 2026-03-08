@@ -1,6 +1,7 @@
 import {
   AttendanceMarkResponse,
-  CreateEventRequest,
+  CreateEventFormData,
+  Event,
   EventQRResponse,
   IdentityIssueResponse,
   IdentityStatusResponse,
@@ -10,17 +11,13 @@ import {
   Proof,
   Receipt,
   VerifyProofRequest,
-  VerifyProofResponse
+  VerifyProofResponse,
 } from '@/types';
 import { tokenStorage } from '../utils/token';
 
-const BASE_URL = process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:3000/api';
+const BASE_URL = process.env.EXPO_PUBLIC_API_URL;
 
-async function request<T>(
-  path: string,
-  options: RequestInit = {},
-  auth = false,
-): Promise<T> {
+async function request<T>(path: string, options: RequestInit = {}, auth = false): Promise<T> {
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
     ...(options.headers as Record<string, string>),
@@ -41,13 +38,10 @@ async function request<T>(
   return res.json() as Promise<T>;
 }
 
-export async function issueIdentity(
-  eventId: string,
-): Promise<IdentityIssueResponse> {
-  const data = await request<IdentityIssueResponse>(
-    `/identity/issue/${eventId}`,
-    { method: 'POST' },
-  );
+export async function issueIdentity(eventId: string): Promise<IdentityIssueResponse> {
+  const data = await request<IdentityIssueResponse>(`/identity/issue/${eventId}`, {
+    method: 'POST',
+  });
   await tokenStorage.save(data.token);
   return data;
 }
@@ -56,7 +50,7 @@ export function getIdentityStatus(): Promise<IdentityStatusResponse> {
   return request<IdentityStatusResponse>('/identity/status', {}, true);
 }
 
-export function createEvent(body: CreateEventRequest): Promise<Event> {
+export function createEvent(body: CreateEventFormData): Promise<Event> {
   return request<Event>('/events/create', {
     method: 'POST',
     body: JSON.stringify(body),
@@ -72,11 +66,7 @@ export function deleteEvent(eventId: string): Promise<string> {
 }
 
 export function markAttendance(): Promise<AttendanceMarkResponse> {
-  return request<AttendanceMarkResponse>(
-    '/attendance/mark',
-    { method: 'POST' },
-    true,
-  );
+  return request<AttendanceMarkResponse>('/attendance/mark', { method: 'POST' }, true);
 }
 
 export function getReceipts(): Promise<Receipt[]> {
@@ -84,21 +74,14 @@ export function getReceipts(): Promise<Receipt[]> {
 }
 
 export function issueReceipt(body: IssueReceiptRequest): Promise<Receipt> {
-  return request<Receipt>(
-    '/receipts/issue',
-    { method: 'POST', body: JSON.stringify(body) },
-    true,
-  );
+  return request<Receipt>('/receipts/issue', { method: 'POST', body: JSON.stringify(body) }, true);
 }
 
-export function mintNFT(
-  receiptId: string,
-  body: MintNFTRequest,
-): Promise<MintNFTResponse> {
+export function mintNFT(receiptId: string, body: MintNFTRequest): Promise<MintNFTResponse> {
   return request<MintNFTResponse>(
     `/receipts/${receiptId}/mint-nft`,
     { method: 'POST', body: JSON.stringify(body) },
-    true,
+    true
   );
 }
 
