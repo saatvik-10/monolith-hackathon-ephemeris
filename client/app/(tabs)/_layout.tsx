@@ -1,8 +1,8 @@
-import { Tabs } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
-import { BlurView } from "expo-blur";
-import { View, StyleSheet } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
+import { Tabs } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import { BlurView } from 'expo-blur';
+import { View, StyleSheet } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const TabLayout = () => {
   return (
@@ -12,65 +12,56 @@ const TabLayout = () => {
         tabBarShowLabel: true,
         tabBarLabelStyle: {
           fontSize: 10,
-          fontWeight: "200",
+          fontWeight: '200',
           marginTop: 0,
           marginBottom: -4,
         },
-        sceneStyle: { backgroundColor: "transparent" },
-        tabBarActiveTintColor: "#14F195",
-        tabBarInactiveTintColor: "rgba(255,255,255,0.5)",
+        sceneStyle: { backgroundColor: 'transparent' },
+        tabBarActiveTintColor: '#14F195',
+        tabBarInactiveTintColor: 'rgba(255,255,255,0.5)',
         tabBarStyle: {
-          position: "absolute",
+          position: 'absolute',
           bottom: 25,
           marginHorizontal: 72,
           height: 70,
-          backgroundColor: "transparent",
+          backgroundColor: 'transparent',
           borderTopWidth: 0,
           elevation: 0,
         },
         tabBarItemStyle: {
           flex: 1,
-          alignItems: "center",
-          justifyContent: "center",
+          alignItems: 'center',
+          justifyContent: 'center',
           paddingVertical: 6,
         },
 
         tabBarBackground: () => (
           <View
-            className="flex-1 rounded-3xl overflow-hidden bg-white/[0.12] border border-white/[0.15]"
+            className="flex-1 overflow-hidden rounded-3xl border border-white/[0.15] bg-white/[0.12]"
             style={{
-              shadowColor: "#000",
+              shadowColor: '#000',
               shadowOffset: { width: 0, height: 10 },
               shadowOpacity: 0.4,
               shadowRadius: 20,
               elevation: 12,
-            }}
-          >
-            <BlurView
-              intensity={100}
-              tint="dark"
-              className="absolute inset-0"
-            />
+            }}>
+            <BlurView intensity={100} tint="dark" className="absolute inset-0" />
 
             <LinearGradient
-              colors={[
-                "rgba(255,255,255,0.25)",
-                "rgba(255,255,255,0.05)"
-              ]}
+              colors={['rgba(255,255,255,0.25)', 'rgba(255,255,255,0.05)']}
               start={{ x: 0, y: 0 }}
               end={{ x: 0.75, y: 1 }}
               style={StyleSheet.absoluteFill}
             />
           </View>
         ),
-      }}
-    >
+      }}>
       <Tabs.Screen
         name="Events"
         options={{
           tabBarIcon: ({ color, focused }) => (
             <Ionicons
-              name={focused ? "calendar" : "calendar-outline"}
+              name={focused ? 'calendar' : 'calendar-outline'}
               size={focused ? 26 : 22}
               color={color}
             />
@@ -83,7 +74,7 @@ const TabLayout = () => {
         options={{
           tabBarIcon: ({ color, focused }) => (
             <Ionicons
-              name={focused ? "shield-checkmark" : "shield-checkmark-outline"}
+              name={focused ? 'receipt' : 'receipt-outline'}
               size={focused ? 26 : 22}
               color={color}
             />
@@ -96,7 +87,7 @@ const TabLayout = () => {
         options={{
           tabBarIcon: ({ color, focused }) => (
             <Ionicons
-              name={focused ? "receipt" : "receipt-outline"}
+              name={focused ? 'shield-checkmark' : 'shield-checkmark-outline'}
               size={focused ? 26 : 22}
               color={color}
             />
