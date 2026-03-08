@@ -17,10 +17,16 @@ export type ReceiptProofPayload = {
 const SECRET_KEY = bs58.decode(process.env.PROOF_SECRET!);
 const PUBLIC_KEY = SECRET_KEY.slice(32);
 
+function canonicalStringify(
+  payload: AttendanceProofPayload | ReceiptProofPayload,
+): string {
+  return JSON.stringify(payload, Object.keys(payload).sort());
+}
+
 export function signProof(
   payload: AttendanceProofPayload | ReceiptProofPayload,
 ): string {
-  const msg = Buffer.from(JSON.stringify(payload));
+  const msg = Buffer.from(canonicalStringify(payload));
   const sig = nacl.sign.detached(msg, SECRET_KEY);
 
   return bs58.encode(sig);
@@ -31,7 +37,7 @@ export function verifySign(
   signature: string,
 ): boolean {
   try {
-    const message = Buffer.from(JSON.stringify(payload));
+    const message = Buffer.from(canonicalStringify(payload));
     const sigBytes = bs58.decode(signature);
 
     return nacl.sign.detached.verify(message, sigBytes, PUBLIC_KEY);
