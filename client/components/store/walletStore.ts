@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { transact, Web3MobileWallet } from '@solana-mobile/mobile-wallet-adapter-protocol-web3js';
+import { PublicKey } from '@solana/web3.js';
 import { create } from 'zustand';
 
 interface WalletStore {
@@ -17,21 +18,24 @@ const APP_IDENTITY = {
   icon: './assets/images/icon.png',
 };
 
+
 export const useWalletStore = create<WalletStore>((set) => ({
   isConnected: false,
   isConnecting: false,
   pubkey: null,
-
+  
   connect: async () => {
     set({ isConnecting: true });
     try {
       const res = await transact(async (wallet: Web3MobileWallet) => {
         const authorizationResult = await wallet.authorize({
-          chain: 'Solana:Devnet',
+          chain: 'solana:devnet',
           identity: APP_IDENTITY,
         });
 
-        return authorizationResult.accounts[0].address;
+        const base64Address = authorizationResult.accounts[0].address;
+        const pubkeyBytes = Uint8Array.from(atob(base64Address), (c) => c.charCodeAt(0));
+        return new PublicKey(pubkeyBytes).toBase58();
       });
 
       set({ isConnected: true, pubkey: res });
