@@ -50,7 +50,7 @@ const Events = () => {
     pubkey === selectedEvent.organizerWallet
   );
 
-  const handleCreateEvent = async (data: CreateEventFormData) => {
+  const handleCreateEvent = async (data: CreateEventFormData): Promise<void> => {
     try {
       if (!pubkey) {
         Alert.alert('Error', 'Please connect your wallet first');

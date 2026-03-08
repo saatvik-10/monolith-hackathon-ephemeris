@@ -7,6 +7,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useState } from 'react';
 import {
+  ActivityIndicator,
   Dimensions,
   Image,
   KeyboardAvoidingView,
@@ -27,7 +28,7 @@ const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 type CreateEventModalProps = {
   visible: boolean;
   onClose: () => void;
-  onSubmit: (data: CreateEventFormData) => void;
+  onSubmit: (data: CreateEventFormData) => Promise<void>;
 };
 
 const INITIAL_FORM: CreateEventFormData = {
@@ -70,6 +71,7 @@ const CreateEventModal = ({ visible, onClose, onSubmit }: CreateEventModalProps)
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedStartTime, setSelectedStartTime] = useState<Date>(new Date());
   const [selectedEndTime, setSelectedEndTime] = useState<Date>(new Date());
+  const [submitting, setSubmitting] = useState(false);
   const imageBase64Ref = React.useRef<string>('');
   const { pubkey } = useWalletStore();
 
@@ -128,7 +130,7 @@ const CreateEventModal = ({ visible, onClose, onSubmit }: CreateEventModalProps)
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (
       !form.name.trim() ||
       !form.startDate.trim() ||
@@ -137,9 +139,14 @@ const CreateEventModal = ({ visible, onClose, onSubmit }: CreateEventModalProps)
       !form.location.trim()
     )
       return;
-    onSubmit({ ...form, image: imageBase64Ref.current || form.image });
-    setForm(INITIAL_FORM);
-    imageBase64Ref.current = '';
+    setSubmitting(true);
+    try {
+      await onSubmit({ ...form, image: imageBase64Ref.current || form.image });
+      setForm(INITIAL_FORM);
+      imageBase64Ref.current = '';
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleClose = () => {
@@ -389,14 +396,23 @@ const CreateEventModal = ({ visible, onClose, onSubmit }: CreateEventModalProps)
 
               <TouchableOpacity
                 onPress={handleSubmit}
-                activeOpacity={0.85}
+                activeOpacity={submitting ? 1 : 0.85}
+                disabled={submitting}
                 className="overflow-hidden rounded-xl">
                 <LinearGradient
                   colors={['#9945FF', '#14F195']}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
-                  className="items-center py-3.5">
-                  <Text className="text-base font-bold text-white">Create Event</Text>
+                  style={{ opacity: submitting ? 0.7 : 1 }}
+                  className="flex-row items-center justify-center gap-2 py-3.5">
+                  {submitting ? (
+                    <>
+                      <ActivityIndicator size="small" color="#fff" />
+                      <Text className="text-base font-bold text-white">Creating...</Text>
+                    </>
+                  ) : (
+                    <Text className="text-base font-bold text-white">Create Event</Text>
+                  )}
                 </LinearGradient>
               </TouchableOpacity>
             </ScrollView>
