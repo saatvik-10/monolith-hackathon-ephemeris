@@ -20,9 +20,10 @@ export class Identity {
         return ctx.json('Event not found', 404);
       }
 
-      const expiresAt = new Date(
-        new Date(event.endTime).getTime() + 12 * 60 * 60 * 1000,
-      );
+      const endDate = new Date(`${event.startDate} ${event.endTime}`);
+      const expiresAt = isNaN(endDate.getTime())
+        ? new Date(Date.now() + 12 * 60 * 60 * 1000)
+        : new Date(endDate.getTime() + 12 * 60 * 60 * 1000);
 
       const newIdentity = await prisma.identity.create({
         data: {
@@ -38,9 +39,13 @@ export class Identity {
         },
       });
 
-      const token = await generateJWT(session.id);
+      const ttlSeconds = Math.max(
+        Math.floor((expiresAt.getTime() - Date.now()) / 1000),
+        15 * 60,
+      );
+      const token = await generateJWT(session.id, ttlSeconds);
 
-      generateCookie(ctx, 'auth_token', token);
+      generateCookie(ctx, 'auth_token', token, ttlSeconds);
 
       return ctx.json(
         {
