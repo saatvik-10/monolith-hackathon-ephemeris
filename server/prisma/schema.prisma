@@ -18,6 +18,7 @@ model Event {
   name                  String
   image                 String
   startTime             DateTime
+  startDate             DateTime @db.Date
   endTime               DateTime
   location              String
   locationURL           String
@@ -26,7 +27,6 @@ model Event {
   organizerName         String
   organizerWallet       String
   collectionMintAddress String?
-  // expiryWindow          Int
   createdAt             DateTime @default(now())
 
   identities Identity[]
