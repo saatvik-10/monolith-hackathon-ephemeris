@@ -1,9 +1,12 @@
-import { useState } from 'react';
-import { FlatList, Alert } from 'react-native';
-import ScreenBackground from '../../components/screen/ScreenBackground';
+import GlassCard from '@/components/common/GlassCard';
 import { Heading } from '@/components/common/Heading';
+import CreateEventModal, { CreateEventFormData } from '@/components/events/CreateEventModal';
 import EventCard from '@/components/events/EventCard';
 import EventModal from '@/components/events/EventModal';
+import { Ionicons } from '@expo/vector-icons';
+import { useState } from 'react';
+import { Alert, FlatList, TouchableOpacity } from 'react-native';
+import ScreenBackground from '../../components/screen/ScreenBackground';
 
 type Event = {
   id: string;
@@ -84,6 +87,13 @@ const eventsData: Event[] = [
 const Events = () => {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [createModalVisible, setCreateModalVisible] = useState(false);
+
+  const handleCreateEvent = (data: CreateEventFormData) => {
+    // TODO: API integration
+    setCreateModalVisible(false);
+    Alert.alert('Event Created', `"${data.name}" has been created!`);
+  };
 
   const handleEventPress = (eventId: string) => {
     const event = eventsData.find((e) => e.id === eventId);
@@ -125,12 +135,36 @@ const Events = () => {
         )}
       />
 
+      <TouchableOpacity
+        onPress={() => setCreateModalVisible(true)}
+        activeOpacity={0.85}
+        className="absolute bottom-32 right-5 h-16 w-16 rounded-2xl"
+        style={{
+          shadowColor: '#9945FF',
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.5,
+          shadowRadius: 8,
+          elevation: 8,
+        }}>
+        <GlassCard
+          className="h-16 w-16 rounded-2xl"
+          innerClassName="h-full items-center justify-center rounded-2xl">
+          <Ionicons name="add" size={28} color="#fff" />
+        </GlassCard>
+      </TouchableOpacity>
+
       <EventModal
         visible={modalVisible}
         onClose={handleCloseModal}
         event={selectedEvent}
         onEdit={handleEditEvent}
         canEdit={false}
+      />
+
+      <CreateEventModal
+        visible={createModalVisible}
+        onClose={() => setCreateModalVisible(false)}
+        onSubmit={handleCreateEvent}
       />
     </ScreenBackground>
   );
