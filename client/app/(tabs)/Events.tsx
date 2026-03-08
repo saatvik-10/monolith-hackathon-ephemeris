@@ -95,7 +95,11 @@ const Events = () => {
   const [qrScanEventId, setQrScanEventId] = useState<string | null>(null);
   const { pubkey } = useWalletStore();
 
-  const isCreator = !!(pubkey && selectedEvent?.creatorPublicKey && pubkey === selectedEvent.creatorPublicKey);
+  const isCreator = !!(
+    pubkey &&
+    selectedEvent?.creatorPublicKey &&
+    pubkey === selectedEvent.creatorPublicKey
+  );
 
   const handleCreateEvent = (data: CreateEventFormData) => {
     // TODO: API integration
