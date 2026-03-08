@@ -10,7 +10,7 @@ export const eventSchema = z.object({
   organizerName: z.string(),
   organizerWallet: z.string().optional(),
   nftEnabled: z.boolean().optional().default(false),
-  expiryWindow: z.number().optional().default(360),
+  // expiryWindow: z.number().optional().default(360),
 });
 
 export type EventType = z.infer<typeof eventSchema>;
