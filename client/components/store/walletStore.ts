@@ -14,7 +14,7 @@ interface WalletStore {
 const APP_IDENTITY = {
   name: 'Monolith',
   uri: 'https://monolith.app/',
-  icon: 'https://monolith.app/icon.png',
+  icon: './assets/images/icon.png',
 };
 
 export const useWalletStore = create<WalletStore>((set) => ({
