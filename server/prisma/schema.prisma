@@ -18,9 +18,9 @@ model Event {
   name                  String
   image                 String
   description           String
-  startTime             DateTime
-  startDate             DateTime @db.Date
-  endTime               DateTime
+  startTime             String
+  startDate             String
+  endTime               String
   location              String
   locationURL           String
   nftEnabled            Boolean  @default(false)
