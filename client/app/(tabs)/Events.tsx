@@ -1,11 +1,13 @@
 import GlassCard from '@/components/common/GlassCard';
 import { Heading } from '@/components/common/Heading';
-import CreateEventModal, { CreateEventFormData } from '@/components/events/CreateEventModal';
+import CreateEventModal from '@/components/events/CreateEventModal';
 import EventCard from '@/components/events/EventCard';
 import EventModal from '@/components/events/EventModal';
 import QRDisplayModal from '@/components/events/QRDisplayModal';
 import QRScannerModal from '@/components/events/QRScannerModal';
 import { useWalletStore } from '@/components/store/walletStore';
+import { createEvent } from '@/lib/api';
+import { CreateEventFormData } from '@/types';
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import { Alert, FlatList, TouchableOpacity } from 'react-native';
@@ -15,13 +17,15 @@ type Event = {
   id: string;
   name: string;
   startDate: string;
+  startTime: string;
+  endTime: string;
   location: string;
   locationURL: string;
   image: string;
   description: string;
   creatorName: string;
   nftEnabled: boolean;
-  creatorPublicKey?: string;
+  organizerWallet?: string;
 };
 
 const eventsData: Event[] = [
@@ -29,6 +33,8 @@ const eventsData: Event[] = [
     id: '1',
     name: 'Hackathon 2026',
     startDate: '12 March 2026',
+    startTime: '2026-03-12T09:00:00.000Z',
+    endTime: '2026-03-12T21:00:00.000Z',
     location: 'Delhi',
     locationURL: 'https://maps.google.com/?q=India+Gate+New+Delhi',
     image: 'https://picsum.photos/600/400?random=1',
@@ -41,6 +47,8 @@ const eventsData: Event[] = [
     id: '2',
     name: 'Web3 Bootcamp',
     startDate: '28 February 2026',
+    startTime: '2026-02-28T10:00:00.000Z',
+    endTime: '2026-02-28T18:00:00.000Z',
     location: 'Mumbai',
     locationURL: 'https://maps.google.com/?q=Gateway+of+India+Mumbai',
     image: 'https://picsum.photos/600/400?random=2',
@@ -53,6 +61,8 @@ const eventsData: Event[] = [
     id: '3',
     name: 'AI Workshop',
     startDate: '5 January 2026',
+    startTime: '2026-01-05T10:00:00.000Z',
+    endTime: '2026-01-05T16:00:00.000Z',
     location: 'Pune',
     locationURL: 'https://maps.google.com/?q=Shaniwar+Wada+Pune',
     image: 'https://picsum.photos/600/400?random=3',
@@ -65,6 +75,8 @@ const eventsData: Event[] = [
     id: '4',
     name: 'Solana Developer Summit',
     startDate: '15 April 2026',
+    startTime: '2026-04-15T09:00:00.000Z',
+    endTime: '2026-04-15T18:00:00.000Z',
     location: 'Ahemdabad',
     locationURL: 'https://maps.google.com/?q=Sabarmati+Riverfront+Ahmedabad',
     image: 'https://picsum.photos/600/400?random=4',
@@ -77,6 +89,8 @@ const eventsData: Event[] = [
     id: '5',
     name: 'Design Thinking Masterclass',
     startDate: '22 March 2026',
+    startTime: '2026-03-22T10:00:00.000Z',
+    endTime: '2026-03-22T17:00:00.000Z',
     location: 'Noida',
     locationURL: 'https://maps.google.com/?q=Okhla+Bird+Sanctuary+Noida',
     image: 'https://picsum.photos/600/400?random=5',
@@ -88,6 +102,7 @@ const eventsData: Event[] = [
 ];
 
 const Events = () => {
+  const [events, setEvents] = useState<Event[]>(eventsData);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [createModalVisible, setCreateModalVisible] = useState(false);
@@ -97,30 +112,64 @@ const Events = () => {
 
   const isCreator = !!(
     pubkey &&
-    selectedEvent?.creatorPublicKey &&
-    pubkey === selectedEvent.creatorPublicKey
+    selectedEvent?.organizerWallet &&
+    pubkey === selectedEvent.organizerWallet
   );
 
-  const handleCreateEvent = (data: CreateEventFormData) => {
-    // TODO: API integration
-    setCreateModalVisible(false);
-    Alert.alert('Event Created', `"${data.name}" has been created!`);
+  const handleCreateEvent = async (data: CreateEventFormData) => {
+    try {
+      if (!pubkey) {
+        Alert.alert('Error', 'Please connect your wallet first');
+        return;
+      }
+      const payload: CreateEventFormData = {
+        name: data.name,
+        image: data.image,
+        startTime: data.startTime,
+        endTime: data.endTime,
+        nftEnabled: data.nftEnabled,
+        startDate: data.startDate,
+        location: data.location,
+        locationURL: data.locationURL,
+        description: data.description,
+        organizerName: data.organizerName,
+        organizerWallet: pubkey,
+      };
+      const newEvent = await createEvent(payload);
+      setEvents((prev) => [
+        ...prev,
+        {
+          id: newEvent.id,
+          name: newEvent.name,
+          startDate: newEvent.startDate,
+          startTime: newEvent.startTime,
+          endTime: newEvent.endTime,
+          location: newEvent.location,
+          locationURL: newEvent.locationURL,
+          image: newEvent.image,
+          description: newEvent.description,
+          creatorName: newEvent.organizerName,
+          nftEnabled: newEvent.nftEnabled,
+          organizerWallet: newEvent.organizerWallet,
+        },
+      ]);
+      setCreateModalVisible(false);
+      Alert.alert('Event Created', `"${data.name}" has been created!`);
+    } catch (err: any) {
+      Alert.alert('Error', err?.message ?? 'Failed to create event');
+    }
   };
 
   const handleEventPress = (eventId: string) => {
-    const event = eventsData.find((e) => e.id === eventId);
+    const event = events.find((e) => e.id === eventId);
     if (event) {
       setSelectedEvent(event);
       setModalVisible(true);
     }
   };
 
-  const handleEditEvent = (eventId: string) => {
-    Alert.alert('Edit Event', `Edit event ${eventId} - API to be implemented`);
-  };
-
   const handleViewQR = (eventId: string) => {
-    const event = eventsData.find((e) => e.id === eventId);
+    const event = events.find((e) => e.id === eventId);
     if (event) setQrDisplayEvent(event);
   };
 
@@ -143,7 +192,7 @@ const Events = () => {
     <ScreenBackground>
       <Heading title="Events" />
       <FlatList
-        data={eventsData}
+        data={events}
         keyExtractor={(item) => item.id}
         contentContainerStyle={{
           paddingHorizontal: 16,
@@ -184,7 +233,6 @@ const Events = () => {
         visible={modalVisible}
         onClose={handleCloseModal}
         event={selectedEvent}
-        onEdit={handleEditEvent}
         onViewQR={handleViewQR}
         onScanQR={handleScanQR}
         canEdit={isCreator}
