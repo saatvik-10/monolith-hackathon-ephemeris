@@ -79,7 +79,7 @@ const Proofs = () => {
       <Heading title="Proofs" />
       {verifiedEvents.length === 0 ? (
         <View className="flex-1 items-center justify-center px-8">
-          <Ionicons name="receipt-outline" size={48} color="#6B7280" />
+          <Ionicons name="shield-checkmark-outline" size={48} color="#6B7280" />
           <Text className="mt-4 text-center text-base text-solana-muted">
             No verified attendances yet. Verify an attendance from the Attendance tab to mint your
             proof NFT.
