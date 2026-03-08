@@ -74,8 +74,8 @@ const Events = () => {
       ]);
       setCreateModalVisible(false);
       Alert.alert('Event Created', `"${data.name}" has been created!`);
-    } catch (err: any) {
-      Alert.alert('Error', err?.message ?? 'Failed to create event');
+    } catch {
+      Alert.alert('Error', 'Failed to create event');
     }
   };
 
@@ -126,8 +126,8 @@ const Events = () => {
       }
 
       Alert.alert('Attendance Recorded', 'Your attendance has been marked!');
-    } catch (err: any) {
-      Alert.alert('Error', err?.message ?? 'Failed to mark attendance');
+    } catch {
+      Alert.alert('Error', 'Failed to mark attendance');
     }
   };
 
