@@ -17,6 +17,7 @@ model Event {
   id                    String   @id @default(cuid())
   name                  String
   image                 String
+  description           String
   startTime             DateTime
   startDate             DateTime @db.Date
   endTime               DateTime
