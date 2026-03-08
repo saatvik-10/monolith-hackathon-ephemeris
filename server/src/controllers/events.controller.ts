@@ -27,7 +27,8 @@ export class Events {
         data: {
           name: data.data.name,
           image: imageIpfsUri,
-          startTime: new Date(data.data.startTime),
+          startTime: new Date(data.data.startTime).toISOString(),
+          startDate: new Date(data.data.startDate),
           endTime: new Date(data.data.endTime),
           location: data.data.location,
           locationURL: data.data.locationURL,
