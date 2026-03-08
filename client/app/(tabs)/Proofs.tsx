@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { FlatList, Image, Text, View } from 'react-native';
+import { FlatList, Image, Linking, Text, TouchableOpacity, View } from 'react-native';
 import { useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import ScreenBackground from '../../components/screen/ScreenBackground';
@@ -22,15 +22,23 @@ const ProofCard = ({ item }: { item: VerifiedEvent }) => (
         </View>
       </View>
     </View>
-    <View className="mt-3 rounded-lg border border-solana-text/10 bg-solana-text/5 px-3 py-2">
-      <Text className="text-xs text-solana-muted">Mint Address</Text>
-      <Text
-        className="mt-0.5 text-xs text-solana-teal"
-        style={{ fontFamily: 'monospace' }}
-        numberOfLines={1}>
-        {item.mintAddress || 'Pending...'}
-      </Text>
-    </View>
+    <TouchableOpacity
+      onPress={() =>
+        Linking.openURL(`https://explorer.solana.com/address/${item.mintAddress}?cluster=devnet`)
+      }>
+      <View className="mt-3 rounded-lg border border-solana-text/10 bg-solana-text/5 px-3 py-2">
+        <View className="flex-row items-center">
+          <Text className="text-xs text-solana-muted">Mint Address</Text>
+          <Ionicons name="open-outline" size={10} color="#14F195" style={{ marginLeft: 8 }} />
+        </View>
+        <Text
+          className="mt-0.5 text-xs text-solana-teal"
+          style={{ fontFamily: 'monospace' }}
+          numberOfLines={1}>
+          {item.mintAddress || 'Pending...'}
+        </Text>
+      </View>
+    </TouchableOpacity>
     <View className="mt-2 flex-row justify-between">
       <View>
         <Text className="text-xs text-solana-muted">Wallet</Text>
