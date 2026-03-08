@@ -6,8 +6,9 @@ import EventModal from '@/components/events/EventModal';
 import QRDisplayModal from '@/components/events/QRDisplayModal';
 import QRScannerModal from '@/components/events/QRScannerModal';
 import { useWalletStore } from '@/components/store/walletStore';
-import { createEvent, getAllEvents } from '@/lib/api';
+import { createEvent, getAllEvents, issueIdentity, markAttendance } from '@/lib/api';
 import { CreateEventFormData, Event } from '@/types';
+import { attendedEventsStorage } from '@/utils/attendance';
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
 import { Alert, FlatList, TouchableOpacity } from 'react-native';
@@ -95,10 +96,39 @@ const Events = () => {
     setQrScanEventId(eventId);
   };
 
-  const handleQRScanned = (eventId: string, qrData: string) => {
+  const handleQRScanned = async (eventId: string, qrData: string) => {
     setQrScanEventId(null);
-    // TODO: API integration — submit attendance with qrData + pubkey
-    Alert.alert('Attendance Recorded', `Scanned: ${qrData}`);
+
+    let scannedEventId = eventId;
+
+    const attendMatch = qrData.match(/\/attend\/([a-zA-Z0-9_-]+)/);
+    if (attendMatch) {
+      scannedEventId = attendMatch[1];
+    } else if (qrData.startsWith('ephemeris:attend:')) {
+      scannedEventId = qrData.replace('ephemeris:attend:', '');
+    }
+
+    try {
+      const identityRes = await issueIdentity(scannedEventId);
+      await markAttendance();
+
+      const event = events.find((e) => e.id === scannedEventId);
+      if (event) {
+        await attendedEventsStorage.add({
+          eventId: event.id,
+          name: event.name,
+          image: event.image,
+          startDate: event.startDate,
+          nftEnabled: event.nftEnabled,
+          attendedAt: new Date().toISOString(),
+          token: identityRes.token,
+        });
+      }
+
+      Alert.alert('Attendance Recorded', 'Your attendance has been marked!');
+    } catch (err: any) {
+      Alert.alert('Error', err?.message ?? 'Failed to mark attendance');
+    }
   };
 
   const handleCloseModal = () => {
