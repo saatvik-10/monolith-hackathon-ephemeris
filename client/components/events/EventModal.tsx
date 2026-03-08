@@ -27,12 +27,23 @@ type EventModalProps = {
     locationURL: string;
     creatorName: string;
     nftEnabled: boolean;
+    organizerWallet?: string;
   } | null;
   onEdit?: (eventId: string) => void;
+  onViewQR?: (eventId: string) => void;
+  onScanQR?: (eventId: string) => void;
   canEdit?: boolean;
 };
 
-const EventModal = ({ visible, onClose, event, onEdit, canEdit = false }: EventModalProps) => {
+const EventModal = ({
+  visible,
+  onClose,
+  event,
+  onEdit,
+  onViewQR,
+  onScanQR,
+  canEdit = false,
+}: EventModalProps) => {
   if (!event) return null;
 
   return (
@@ -67,16 +78,49 @@ const EventModal = ({ visible, onClose, event, onEdit, canEdit = false }: EventM
               style={StyleSheet.absoluteFillObject}
             />
             <View className="flex-row items-center justify-between">
-              <Text className="my-4 text-2xl font-bold text-white">{event.name}</Text>
-              {canEdit && onEdit && (
+              <Text className="my-4 text-2xl font-bold text-solana-text">{event.name}</Text>
+
+              {canEdit && (
+                <View className="flex-row items-center gap-2">
+                  {onEdit && (
+                    <TouchableOpacity
+                      onPress={() => {
+                        onEdit(event.id);
+                        onClose();
+                      }}
+                      className="overflow-hidden rounded-xl">
+                      <GlassCard innerClassName="flex-row items-center gap-1.5 px-3 py-2">
+                        <Ionicons name="pencil-outline" size={14} color="#E2E8F0" />
+                        <Text className="text-sm font-semibold text-solana-text">Edit</Text>
+                      </GlassCard>
+                    </TouchableOpacity>
+                  )}
+                  {onViewQR && (
+                    <TouchableOpacity
+                      onPress={() => {
+                        onViewQR(event.id);
+                        onClose();
+                      }}
+                      className="overflow-hidden rounded-xl">
+                      <GlassCard innerClassName="flex-row items-center gap-1.5 px-3 py-2">
+                        <Ionicons name="qr-code-outline" size={14} color="#14F195" />
+                        <Text className="text-sm font-semibold text-solana-teal">QR</Text>
+                      </GlassCard>
+                    </TouchableOpacity>
+                  )}
+                </View>
+              )}
+
+              {!canEdit && onScanQR && (
                 <TouchableOpacity
                   onPress={() => {
-                    onEdit(event.id);
+                    onScanQR(event.id);
                     onClose();
                   }}
-                  className="mb-4 flex items-end rounded-xl">
-                  <GlassCard>
-                    <Text className="text-center text-sm font-bold text-white">Edit</Text>
+                  className="self-center overflow-hidden rounded-2xl">
+                  <GlassCard innerClassName="flex-row items-center gap-1.5 px-3 py-2">
+                    <Ionicons name="scan-outline" size={14} color="#14F195" />
+                    <Text className="text-sm font-semibold text-solana-teal">Scan QR</Text>
                   </GlassCard>
                 </TouchableOpacity>
               )}
