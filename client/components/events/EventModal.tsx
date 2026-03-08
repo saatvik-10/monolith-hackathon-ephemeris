@@ -34,6 +34,7 @@ type EventModalProps = {
   onEdit?: (eventId: string) => void;
   onViewQR?: (eventId: string) => void;
   onScanQR?: (eventId: string) => void;
+  onDelete?: (eventId: string) => void;
   canEdit?: boolean;
 };
 
@@ -44,6 +45,7 @@ const EventModal = ({
   onEdit,
   onViewQR,
   onScanQR,
+  onDelete,
   canEdit = false,
 }: EventModalProps) => {
   if (!event) return null;
@@ -107,6 +109,19 @@ const EventModal = ({
                       <GlassCard innerClassName="flex-row items-center gap-1.5 px-3 py-2">
                         <Ionicons name="qr-code-outline" size={14} color="#14F195" />
                         <Text className="text-sm font-semibold text-solana-teal">QR</Text>
+                      </GlassCard>
+                    </TouchableOpacity>
+                  )}
+                  {onDelete && (
+                    <TouchableOpacity
+                      onPress={() => {
+                        onDelete(event.id);
+                        onClose();
+                      }}
+                      className="overflow-hidden rounded-xl">
+                      <GlassCard innerClassName="flex-row items-center gap-1.5 px-3 py-2">
+                        <Ionicons name="trash-outline" size={14} color="#FF6B6B" />
+                        <Text className="text-sm font-semibold" style={{ color: '#FF6B6B' }}>Delete</Text>
                       </GlassCard>
                     </TouchableOpacity>
                   )}
