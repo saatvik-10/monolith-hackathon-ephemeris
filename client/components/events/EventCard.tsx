@@ -12,7 +12,7 @@ type EventCardProps = {
 
 const EventCard = ({ id, name, startDate, location, image, onPress }: EventCardProps) => {
   return (
-    <TouchableOpacity onPress={() => onPress(id)} className="mb-4">
+    <TouchableOpacity onPress={() => onPress(id)} className="mb-3">
       <View className="relative h-60 overflow-hidden rounded-2xl border">
         <Image source={{ uri: image }} className="absolute h-full w-full" resizeMode="cover" />
 
