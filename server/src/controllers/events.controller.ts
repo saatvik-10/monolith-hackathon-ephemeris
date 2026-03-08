@@ -74,6 +74,18 @@ export class Events {
     }
   }
 
+  async getAllEvents(ctx: Context) {
+    try {
+      const events = await prisma.event.findMany({
+        orderBy: { startDate: 'desc' },
+      });
+      return ctx.json(events, 200);
+    } catch (err) {
+      console.error('Err getting all events', err);
+      return ctx.json('Err getting all events', 500);
+    }
+  }
+
   async getEventId(ctx: Context) {
     const eventId = ctx.req.param('eventId');
 
