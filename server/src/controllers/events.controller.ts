@@ -34,7 +34,6 @@ export class Events {
           organizerName: data.data.organizerName,
           organizerWallet: data.data.organizerWallet,
           nftEnabled: data.data.nftEnabled,
-          // expiryWindow: data.data.expiryWindow,
         },
       });
 

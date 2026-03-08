@@ -8,7 +8,7 @@ export const eventSchema = z.object({
   location: z.string('Event location is required'),
   locationURL: z.url('Event location URL must be provided'),
   organizerName: z.string(),
-  organizerWallet: z.string().optional(),
+  organizerWallet: z.string("Please connect wallet to create an event"),
   nftEnabled: z.boolean().optional().default(false),
   // expiryWindow: z.number().optional().default(360),
 });

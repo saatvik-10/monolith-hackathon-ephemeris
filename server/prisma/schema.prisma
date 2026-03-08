@@ -24,7 +24,7 @@ model Event {
   nftEnabled            Boolean  @default(false)
   nftPayer              String   @default("organizer")
   organizerName         String
-  organizerWallet       String?
+  organizerWallet       String
   collectionMintAddress String?
   // expiryWindow          Int
   createdAt             DateTime @default(now())
