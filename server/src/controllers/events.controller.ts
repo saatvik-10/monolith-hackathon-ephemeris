@@ -3,6 +3,7 @@ import { prisma } from '../../prisma';
 import { eventSchema } from '../validators/event.validator';
 import { uploadImageToIPFS, uploadToIPFS } from '../utils/ipfs';
 import { createEventCollection } from '../utils/mint';
+import { getIPFSHttpUrl } from '../helper/ipfs.helper';
 
 export class Events {
   async createEvent(ctx: Context) {
@@ -19,6 +20,7 @@ export class Events {
       let imageIpfsUri = data.data.image;
       try {
         imageIpfsUri = await uploadImageToIPFS(data.data.image);
+        imageIpfsUri = getIPFSHttpUrl(imageIpfsUri);
       } catch (err) {
         console.warn(
           'Failed to upload event image to IPFS, storing original URL:',
@@ -121,7 +123,7 @@ export class Events {
         return ctx.json('Event not found', 404);
       }
 
-      const entryUrl = `${process.env.BASE_URL}/join/${eventId}`;
+      const entryUrl = `${process.env.BASE_URL}/api/join/${eventId}`;
 
       return ctx.json(
         {
