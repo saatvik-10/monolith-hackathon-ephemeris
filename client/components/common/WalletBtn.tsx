@@ -7,7 +7,7 @@ export function WalletBtn() {
 
   if (isConnecting) {
     return (
-      <View className="flex-row items-center gap-2 rounded-lg bg-white/10 px-3 py-2">
+      <View className="flex-row items-center gap-2 rounded-lg bg-solana-text/10 px-3 py-2">
         <ActivityIndicator size="small" color="#14F195" />
         <Text className="text-sm text-solana-text">Connecting...</Text>
       </View>
@@ -17,7 +17,7 @@ export function WalletBtn() {
   if (isConnected && pubkey) {
     return (
       <TouchableOpacity
-        className="flex-row items-center gap-2 rounded-lg bg-green-500/20 px-3 py-2"
+        className="flex-row items-center gap-2 rounded-xl bg-solana-teal/10 px-3 py-2"
         onPress={disconnect}>
         <Ionicons name="wallet" size={16} color="#14F195" />
         <Text className="text-sm font-semibold text-solana-teal">
@@ -30,7 +30,7 @@ export function WalletBtn() {
 
   return (
     <TouchableOpacity
-      className="flex-row items-center gap-2 rounded-lg bg-white/10 px-3 py-2"
+      className="flex-row items-center gap-2 rounded-lg bg-solana-purple/40 px-3 py-2"
       onPress={connect}>
       <Ionicons name="wallet-outline" size={16} color="#fff" />
       <Text className="text-sm font-semibold text-solana-text">Connect</Text>
