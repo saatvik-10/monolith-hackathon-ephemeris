@@ -1,3 +1,4 @@
+import { CreateEventFormData } from '@/types';
 import { formatDate } from '@/utils/lib';
 import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
@@ -23,17 +24,6 @@ import { useWalletStore } from '../store/walletStore';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
-export type CreateEventFormData = {
-  name: string;
-  startDate: string;
-  location: string;
-  locationURL: string;
-  image: string;
-  description: string;
-  creatorName: string;
-  nftEnabled: boolean;
-};
-
 type CreateEventModalProps = {
   visible: boolean;
   onClose: () => void;
@@ -43,11 +33,14 @@ type CreateEventModalProps = {
 const INITIAL_FORM: CreateEventFormData = {
   name: '',
   startDate: '',
+  startTime: '',
+  description: '',
+  endTime: '',
   location: '',
   locationURL: '',
   image: '',
-  description: '',
-  creatorName: '',
+  organizerName: '',
+  organizerWallet: '',
   nftEnabled: false,
 };
 
@@ -72,17 +65,48 @@ const inputStyle = {
 const CreateEventModal = ({ visible, onClose, onSubmit }: CreateEventModalProps) => {
   const [form, setForm] = useState<CreateEventFormData>(INITIAL_FORM);
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showStartTimePicker, setShowStartTimePicker] = useState(false);
+  const [showEndTimePicker, setShowEndTimePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [selectedStartTime, setSelectedStartTime] = useState<Date>(new Date());
+  const [selectedEndTime, setSelectedEndTime] = useState<Date>(new Date());
   const { pubkey } = useWalletStore();
 
   const set = (key: keyof CreateEventFormData) => (val: string | boolean) =>
     setForm((prev) => ({ ...prev, [key]: val }));
 
+  const formatPickedTime = (time: Date): string => {
+    const h = time.getHours();
+    const min = String(time.getMinutes()).padStart(2, '0');
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    const h12 = h % 12 || 12;
+    return `${h12}:${min} ${ampm}`;
+  };
+
   const handleDateChange = (_: DateTimePickerEvent, date?: Date) => {
     setShowDatePicker(Platform.OS === 'ios');
     if (date) {
       setSelectedDate(date);
-      setForm((prev) => ({ ...prev, startDate: formatDate(date) }));
+      setForm((prev) => ({
+        ...prev,
+        startDate: formatDate(date),
+      }));
+    }
+  };
+
+  const handleStartTimeChange = (_: DateTimePickerEvent, time?: Date) => {
+    setShowStartTimePicker(Platform.OS === 'ios');
+    if (time) {
+      setSelectedStartTime(time);
+      setForm((prev) => ({ ...prev, startTime: formatPickedTime(time) }));
+    }
+  };
+
+  const handleEndTimeChange = (_: DateTimePickerEvent, time?: Date) => {
+    setShowEndTimePicker(Platform.OS === 'ios');
+    if (time) {
+      setSelectedEndTime(time);
+      setForm((prev) => ({ ...prev, endTime: formatPickedTime(time) }));
     }
   };
 
@@ -101,7 +125,14 @@ const CreateEventModal = ({ visible, onClose, onSubmit }: CreateEventModalProps)
   };
 
   const handleSubmit = () => {
-    if (!form.name.trim() || !form.startDate.trim() || !form.location.trim()) return;
+    if (
+      !form.name.trim() ||
+      !form.startDate.trim() ||
+      !form.startTime.trim() ||
+      !form.endTime.trim() ||
+      !form.location.trim()
+    )
+      return;
     onSubmit(form);
     setForm(INITIAL_FORM);
   };
@@ -178,6 +209,65 @@ const CreateEventModal = ({ visible, onClose, onSubmit }: CreateEventModalProps)
 
               <View className="flex-row gap-3">
                 <View className="flex-1">
+                  <Field label="Start Time *">
+                    <TouchableOpacity
+                      onPress={() => setShowStartTimePicker(true)}
+                      style={[
+                        inputStyle,
+                        {
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                        },
+                      ]}>
+                      <Text style={{ color: form.startTime ? '#E2E8F0' : '#6B7280', fontSize: 14 }}>
+                        {form.startTime || 'Select time'}
+                      </Text>
+                      <Ionicons name="time-outline" size={18} color="#6B7280" />
+                    </TouchableOpacity>
+                    {showStartTimePicker && (
+                      <DateTimePicker
+                        value={selectedStartTime}
+                        mode="time"
+                        display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                        onChange={handleStartTimeChange}
+                        themeVariant="dark"
+                      />
+                    )}
+                  </Field>
+                </View>
+                <View className="flex-1">
+                  <Field label="End Time *">
+                    <TouchableOpacity
+                      onPress={() => setShowEndTimePicker(true)}
+                      style={[
+                        inputStyle,
+                        {
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                        },
+                      ]}>
+                      <Text style={{ color: form.endTime ? '#E2E8F0' : '#6B7280', fontSize: 14 }}>
+                        {form.endTime || 'Select time'}
+                      </Text>
+                      <Ionicons name="time-outline" size={18} color="#6B7280" />
+                    </TouchableOpacity>
+                    {showEndTimePicker && (
+                      <DateTimePicker
+                        value={selectedEndTime}
+                        mode="time"
+                        display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                        onChange={handleEndTimeChange}
+                        themeVariant="dark"
+                      />
+                    )}
+                  </Field>
+                </View>
+              </View>
+
+              <View className="flex-row gap-3">
+                <View className="flex-1">
                   <Field label="Location *">
                     <TextInput
                       style={inputStyle}
@@ -208,8 +298,8 @@ const CreateEventModal = ({ visible, onClose, onSubmit }: CreateEventModalProps)
                   style={inputStyle}
                   placeholder="e.g. Superteam India"
                   placeholderTextColor="#6B7280"
-                  value={form.creatorName}
-                  onChangeText={set('creatorName')}
+                  value={form.organizerName}
+                  onChangeText={set('organizerName')}
                 />
               </Field>
 
