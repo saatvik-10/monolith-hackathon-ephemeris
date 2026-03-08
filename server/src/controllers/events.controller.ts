@@ -9,7 +9,10 @@ export class Events {
     const data = eventSchema.safeParse(await ctx.req.json());
 
     if (!data.success) {
-      return ctx.json('Invalid Input', 422);
+      return ctx.json(
+        { error: 'Invalid Input', issues: data.error.issues },
+        422,
+      );
     }
 
     try {
@@ -28,9 +31,9 @@ export class Events {
           name: data.data.name,
           image: imageIpfsUri,
           description: data.data.description,
-          startTime: new Date(data.data.startTime).toISOString(),
-          startDate: new Date(data.data.startDate),
-          endTime: new Date(data.data.endTime),
+          startTime: data.data.startTime,
+          startDate: data.data.startDate,
+          endTime: data.data.endTime,
           location: data.data.location,
           locationURL: data.data.locationURL,
           organizerName: data.data.organizerName,
@@ -134,7 +137,7 @@ export class Events {
         return ctx.json('Event not found', 404);
       }
 
-      if (currTime <= event.endTime) {
+      if (currTime <= new Date(event.endTime)) {
         return ctx.json('Event has not ended yet', 400);
       }
 

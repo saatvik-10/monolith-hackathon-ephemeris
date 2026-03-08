@@ -21,7 +21,7 @@ export class Identity {
       }
 
       const expiresAt = new Date(
-        event.endTime.getTime() + event.expiryWindow * 60 * 1000,
+        new Date(event.endTime).getTime() + 12 * 60 * 60 * 1000,
       );
 
       const newIdentity = await prisma.identity.create({
