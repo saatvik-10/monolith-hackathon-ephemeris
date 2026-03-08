@@ -12,8 +12,8 @@ interface WalletStore {
 }
 
 const APP_IDENTITY = {
-  name: 'Monolith',
-  uri: 'https://monolith.app/',
+  name: 'Ephemeris',
+  uri: 'https://ephemeris.app/',
   icon: './assets/images/icon.png',
 };
 

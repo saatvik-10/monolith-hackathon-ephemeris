@@ -14,7 +14,7 @@ type QRDisplayModalProps = {
 const QRDisplayModal = ({ visible, event, onClose }: QRDisplayModalProps) => {
   if (!event) return null;
 
-  const qrValue = `monolith:attend:${event.id}`;
+  const qrValue = `ephemeris:attend:${event.id}`;
 
   const handleShare = () => {
     Share.share({ message: `Attend "${event.name}" — QR: ${qrValue}` });
