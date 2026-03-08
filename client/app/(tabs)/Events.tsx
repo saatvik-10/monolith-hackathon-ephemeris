@@ -6,7 +6,7 @@ import EventModal from '@/components/events/EventModal';
 import QRDisplayModal from '@/components/events/QRDisplayModal';
 import QRScannerModal from '@/components/events/QRScannerModal';
 import { useWalletStore } from '@/components/store/walletStore';
-import { createEvent, getAllEvents, issueIdentity, markAttendance } from '@/lib/api';
+import { createEvent, deleteEvent, getAllEvents, issueIdentity, markAttendance } from '@/lib/api';
 import { CreateEventFormData, Event } from '@/types';
 import { attendedEventsStorage } from '@/utils/attendance';
 import { Ionicons } from '@expo/vector-icons';
@@ -25,8 +25,23 @@ const Events = () => {
 
   useEffect(() => {
     getAllEvents()
-      .then(setEvents)
-      .catch((err) => console.error('Failed to load events', err));
+      .then((all) => {
+        const now = new Date();
+        const live = all.filter((e) => {
+          const end = new Date(`${e.startDate} ${e.endTime}`);
+          return isNaN(end.getTime()) || end >= now;
+        });
+        setEvents(live);
+
+        const pubkey = useWalletStore.getState().pubkey;
+        all
+          .filter((e) => {
+            const end = new Date(`${e.startDate} ${e.endTime}`);
+            return !isNaN(end.getTime()) && end < now && e.organizerWallet === pubkey;
+          })
+          .forEach((e) => deleteEvent(e.id).catch(() => {}));
+      })
+      .catch((err) => console.error('Failed to load events'));
   }, []);
 
   const isCreator = !!(
@@ -94,6 +109,30 @@ const Events = () => {
 
   const handleScanQR = (eventId: string) => {
     setQrScanEventId(eventId);
+  };
+
+  const handleDeleteEvent = (eventId: string) => {
+    const event = events.find((e) => e.id === eventId);
+    if (!event) return;
+    Alert.alert(
+      'Delete Event',
+      `Are you sure you want to delete "${event.name}"? This cannot be undone.`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await deleteEvent(eventId);
+              setEvents((prev) => prev.filter((e) => e.id !== eventId));
+            } catch {
+              Alert.alert('Error', 'Failed to delete event');
+            }
+          },
+        },
+      ]
+    );
   };
 
   const handleQRScanned = async (eventId: string, qrData: string) => {
@@ -183,6 +222,7 @@ const Events = () => {
         event={selectedEvent}
         onViewQR={handleViewQR}
         onScanQR={handleScanQR}
+        onDelete={isCreator ? handleDeleteEvent : undefined}
         canEdit={isCreator}
       />
 
