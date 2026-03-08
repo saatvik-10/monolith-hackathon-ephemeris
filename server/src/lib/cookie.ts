@@ -5,12 +5,13 @@ export const generateCookie = (
   ctx: Context,
   tokenName: string,
   token: string,
+  maxAgeSeconds: number = 15 * 60,
 ) => {
   setCookie(ctx, tokenName, token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'Lax',
     path: '/',
-    maxAge: 15 * 60,
+    maxAge: maxAgeSeconds,
   });
 };
