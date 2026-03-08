@@ -3,6 +3,9 @@ import { Heading } from '@/components/common/Heading';
 import CreateEventModal, { CreateEventFormData } from '@/components/events/CreateEventModal';
 import EventCard from '@/components/events/EventCard';
 import EventModal from '@/components/events/EventModal';
+import QRDisplayModal from '@/components/events/QRDisplayModal';
+import QRScannerModal from '@/components/events/QRScannerModal';
+import { useWalletStore } from '@/components/store/walletStore';
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import { Alert, FlatList, TouchableOpacity } from 'react-native';
@@ -88,6 +91,11 @@ const Events = () => {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [createModalVisible, setCreateModalVisible] = useState(false);
+  const [qrDisplayEvent, setQrDisplayEvent] = useState<Event | null>(null);
+  const [qrScanEventId, setQrScanEventId] = useState<string | null>(null);
+  const { pubkey } = useWalletStore();
+
+  const isCreator = !!(pubkey && selectedEvent?.creatorPublicKey && pubkey === selectedEvent.creatorPublicKey);
 
   const handleCreateEvent = (data: CreateEventFormData) => {
     // TODO: API integration
@@ -105,6 +113,21 @@ const Events = () => {
 
   const handleEditEvent = (eventId: string) => {
     Alert.alert('Edit Event', `Edit event ${eventId} - API to be implemented`);
+  };
+
+  const handleViewQR = (eventId: string) => {
+    const event = eventsData.find((e) => e.id === eventId);
+    if (event) setQrDisplayEvent(event);
+  };
+
+  const handleScanQR = (eventId: string) => {
+    setQrScanEventId(eventId);
+  };
+
+  const handleQRScanned = (eventId: string, qrData: string) => {
+    setQrScanEventId(null);
+    // TODO: API integration — submit attendance with qrData + pubkey
+    Alert.alert('Attendance Recorded', `Scanned: ${qrData}`);
   };
 
   const handleCloseModal = () => {
@@ -158,13 +181,27 @@ const Events = () => {
         onClose={handleCloseModal}
         event={selectedEvent}
         onEdit={handleEditEvent}
-        canEdit={false}
+        onViewQR={handleViewQR}
+        onScanQR={handleScanQR}
+        canEdit={isCreator}
       />
 
       <CreateEventModal
         visible={createModalVisible}
         onClose={() => setCreateModalVisible(false)}
         onSubmit={handleCreateEvent}
+      />
+      <QRDisplayModal
+        visible={!!qrDisplayEvent}
+        event={qrDisplayEvent}
+        onClose={() => setQrDisplayEvent(null)}
+      />
+
+      <QRScannerModal
+        visible={!!qrScanEventId}
+        eventId={qrScanEventId}
+        onClose={() => setQrScanEventId(null)}
+        onScanned={handleQRScanned}
       />
     </ScreenBackground>
   );
