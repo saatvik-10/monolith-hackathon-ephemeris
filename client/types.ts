@@ -19,24 +19,29 @@ export interface Event {
   id: string;
   name: string;
   image: string;
+  description: string;
+  startDate: string;
   startTime: string;
   endTime: string;
+  location: string;
+  locationURL: string;
   organizerName: string;
   organizerWallet: string;
   nftEnabled: boolean;
-  expiryWindow: number;
-  createdAt: string;
 }
 
-export interface CreateEventRequest {
+export interface CreateEventFormData {
   name: string;
-  image: string;
+  startDate: string;
   startTime: string;
+  description: string;
   endTime: string;
+  location: string;
+  locationURL: string;
+  image: string;
   organizerName: string;
   organizerWallet: string;
   nftEnabled: boolean;
-  expiryWindow: number;
 }
 
 export interface EventQRResponse {
