@@ -1,9 +1,18 @@
-import React from 'react';
-import { Modal, View, Text, Image, TouchableOpacity, ScrollView, StyleSheet, Linking } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import GlassCard from '../common/GlassCard';
 import { Ionicons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
+import { LinearGradient } from 'expo-linear-gradient';
+import React from 'react';
+import {
+  Image,
+  Linking,
+  Modal,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import GlassCard from '../common/GlassCard';
 
 type EventModalProps = {
   visible: boolean;
@@ -15,7 +24,7 @@ type EventModalProps = {
     description: string;
     startDate: string;
     location: string;
-    locationURL: string
+    locationURL: string;
     creatorName: string;
     nftEnabled: boolean;
   } | null;
@@ -28,15 +37,15 @@ const EventModal = ({ visible, onClose, event, onEdit, canEdit = false }: EventM
 
   return (
     <Modal visible={visible} animationType="slide" transparent={true} onRequestClose={onClose}>
-      <View className="flex-1 bg-black/60 rounded-t-3xl justify-end">
+      <View className="flex-1 justify-end">
         <ScrollView
           showsVerticalScrollIndicator={false}
-          className="flex-1 rounded-t-3xl overflow-hidden"
+          className="overflow-hidden rounded-t-3xl"
+          style={{ maxHeight: '95%' }}
           contentContainerStyle={{ paddingBottom: 20 }}>
           <TouchableOpacity
             onPress={onClose}
-            className="absolute right-4 top-4 z-10 h-10 w-10 items-center justify-center rounded-full bg-gray-600"
-          >
+            className="absolute right-4 top-4 z-10 h-10 w-10 items-center justify-center rounded-full bg-solana-muted/50">
             <Ionicons name="close" size={22} color="white" />
           </TouchableOpacity>
 
@@ -50,7 +59,7 @@ const EventModal = ({ visible, onClose, event, onEdit, canEdit = false }: EventM
             />
           </View>
 
-          <BlurView className="inset-0 h-full px-4 " tint="dark" intensity={100}>
+          <BlurView className="inset-0 h-full px-4" tint="dark" intensity={100}>
             <LinearGradient
               colors={['rgba(19, 17, 28, 1)', 'rgba(11, 15, 25, 0.75)', 'rgba(255, 255, 255, 0.3)']}
               start={{ x: 0, y: 0 }}
@@ -87,13 +96,12 @@ const EventModal = ({ visible, onClose, event, onEdit, canEdit = false }: EventM
 
                     <TouchableOpacity
                       onPress={() => Linking.openURL(event.locationURL)}
-                      className="flex-row items-center"
-                    >
+                      className="flex-row items-center">
                       <Text className="text-base font-semibold text-solana-teal underline">
                         {event.location}
                       </Text>
 
-                      <Ionicons 
+                      <Ionicons
                         name="open-outline"
                         size={14}
                         color="#14F195"
@@ -103,7 +111,7 @@ const EventModal = ({ visible, onClose, event, onEdit, canEdit = false }: EventM
                   </View>
                 </View>
 
-                <View className="flex-row items-center border-t border-white/10 pt-2 mt-2">
+                <View className="mt-2 flex-row items-center border-t border-white/10 pt-2">
                   <View className="flex-1">
                     <Text className="mb-1 text-xs text-white/60">Organizer</Text>
                     <Text className="text-base font-semibold text-white">{event.creatorName}</Text>
