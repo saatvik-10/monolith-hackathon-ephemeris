@@ -4,6 +4,7 @@ import { identityRoute } from './identity.route';
 import { attendanceRoute } from './attendance.route';
 import { receiptRoute } from './receipt.route';
 import { proofRoute } from './proof.route';
+import { joinRoute } from './join.route';
 
 const router = new Hono();
 
@@ -12,5 +13,6 @@ router.route('/identity', identityRoute);
 router.route('/attendance', attendanceRoute);
 router.route('/receipts', receiptRoute);
 router.route('/proofs', proofRoute);
+router.route('/join', joinRoute);
 
 export default router;
