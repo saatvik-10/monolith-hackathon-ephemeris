@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "client",
-    "slug": "client",
+    "name": "Ephemeris",
+    "slug": "ephemeris",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/ephimeris.png",
@@ -10,7 +10,7 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.client"
+      "bundleIdentifier": "com.anonymous.ephemeris"
     },
     "android": {
       "adaptiveIcon": {
@@ -21,7 +21,7 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.anonymous.client"
+      "package": "com.anonymous.ephemeris"
     },
     "web": {
       "output": "static",
