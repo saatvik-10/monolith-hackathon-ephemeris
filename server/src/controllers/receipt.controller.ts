@@ -149,7 +149,7 @@ export class Receipt {
 
       const metadata = generateMetadata(
         receipt.event.name,
-        receipt.event.startTime.toISOString().split('T')[0] as string,
+        receipt.event.startDate,
         contentHash,
         receipt.event.image,
         receipt.id,
