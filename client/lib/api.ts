@@ -50,6 +50,10 @@ export function getIdentityStatus(): Promise<IdentityStatusResponse> {
   return request<IdentityStatusResponse>('/identity/status', {}, true);
 }
 
+export function getAllEvents(): Promise<Event[]> {
+  return request<Event[]>('/events');
+}
+
 export function createEvent(body: CreateEventFormData): Promise<Event> {
   return request<Event>('/events/create', {
     method: 'POST',

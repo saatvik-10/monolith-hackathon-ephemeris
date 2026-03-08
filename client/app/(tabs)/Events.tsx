@@ -6,109 +6,27 @@ import EventModal from '@/components/events/EventModal';
 import QRDisplayModal from '@/components/events/QRDisplayModal';
 import QRScannerModal from '@/components/events/QRScannerModal';
 import { useWalletStore } from '@/components/store/walletStore';
-import { createEvent } from '@/lib/api';
-import { CreateEventFormData } from '@/types';
+import { createEvent, getAllEvents } from '@/lib/api';
+import { CreateEventFormData, Event } from '@/types';
 import { Ionicons } from '@expo/vector-icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Alert, FlatList, TouchableOpacity } from 'react-native';
 import ScreenBackground from '../../components/screen/ScreenBackground';
 
-type Event = {
-  id: string;
-  name: string;
-  startDate: string;
-  startTime: string;
-  endTime: string;
-  location: string;
-  locationURL: string;
-  image: string;
-  description: string;
-  creatorName: string;
-  nftEnabled: boolean;
-  organizerWallet?: string;
-};
-
-const eventsData: Event[] = [
-  {
-    id: '1',
-    name: 'Hackathon 2026',
-    startDate: '12 March 2026',
-    startTime: '2026-03-12T09:00:00.000Z',
-    endTime: '2026-03-12T21:00:00.000Z',
-    location: 'Delhi',
-    locationURL: 'https://maps.google.com/?q=India+Gate+New+Delhi',
-    image: 'https://picsum.photos/600/400?random=1',
-    description:
-      'Join us for an exciting 24-hour hackathon where developers, designers, and innovators come together to build the next big thing. Network with industry experts and showcase your skills!',
-    creatorName: 'Superteam',
-    nftEnabled: true,
-  },
-  {
-    id: '2',
-    name: 'Web3 Bootcamp',
-    startDate: '28 February 2026',
-    startTime: '2026-02-28T10:00:00.000Z',
-    endTime: '2026-02-28T18:00:00.000Z',
-    location: 'Mumbai',
-    locationURL: 'https://maps.google.com/?q=Gateway+of+India+Mumbai',
-    image: 'https://picsum.photos/600/400?random=2',
-    description:
-      'A comprehensive 4-week bootcamp covering blockchain basics, smart contracts, DeFi protocols, and hands-on development. Perfect for beginners to advanced developers.',
-    creatorName: 'Blockchain Academy',
-    nftEnabled: true,
-  },
-  {
-    id: '3',
-    name: 'AI Workshop',
-    startDate: '5 January 2026',
-    startTime: '2026-01-05T10:00:00.000Z',
-    endTime: '2026-01-05T16:00:00.000Z',
-    location: 'Pune',
-    locationURL: 'https://maps.google.com/?q=Shaniwar+Wada+Pune',
-    image: 'https://picsum.photos/600/400?random=3',
-    description:
-      'Explore the cutting edge of artificial intelligence with practical workshops on machine learning, neural networks, and real-world applications. Limited seats available!',
-    creatorName: 'AI Labs',
-    nftEnabled: false,
-  },
-  {
-    id: '4',
-    name: 'Solana Developer Summit',
-    startDate: '15 April 2026',
-    startTime: '2026-04-15T09:00:00.000Z',
-    endTime: '2026-04-15T18:00:00.000Z',
-    location: 'Ahemdabad',
-    locationURL: 'https://maps.google.com/?q=Sabarmati+Riverfront+Ahmedabad',
-    image: 'https://picsum.photos/600/400?random=4',
-    description:
-      'Meet Solana developers worldwide and learn about the latest tools, frameworks, and best practices. Includes technical talks and networking sessions.',
-    creatorName: 'Solana Foundation',
-    nftEnabled: true,
-  },
-  {
-    id: '5',
-    name: 'Design Thinking Masterclass',
-    startDate: '22 March 2026',
-    startTime: '2026-03-22T10:00:00.000Z',
-    endTime: '2026-03-22T17:00:00.000Z',
-    location: 'Noida',
-    locationURL: 'https://maps.google.com/?q=Okhla+Bird+Sanctuary+Noida',
-    image: 'https://picsum.photos/600/400?random=5',
-    description:
-      'Master the art of design thinking and user-centric development. Learn frameworks, methodologies, and tools used by leading companies.',
-    creatorName: 'Design League',
-    nftEnabled: false,
-  },
-];
-
 const Events = () => {
-  const [events, setEvents] = useState<Event[]>(eventsData);
+  const [events, setEvents] = useState<Event[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [createModalVisible, setCreateModalVisible] = useState(false);
   const [qrDisplayEvent, setQrDisplayEvent] = useState<Event | null>(null);
   const [qrScanEventId, setQrScanEventId] = useState<string | null>(null);
   const { pubkey } = useWalletStore();
+
+  useEffect(() => {
+    getAllEvents()
+      .then(setEvents)
+      .catch((err) => console.error('Failed to load events', err));
+  }, []);
 
   const isCreator = !!(
     pubkey &&
@@ -141,16 +59,16 @@ const Events = () => {
         {
           id: newEvent.id,
           name: newEvent.name,
+          image: newEvent.image,
+          description: newEvent.description,
           startDate: newEvent.startDate,
           startTime: newEvent.startTime,
           endTime: newEvent.endTime,
           location: newEvent.location,
           locationURL: newEvent.locationURL,
-          image: newEvent.image,
-          description: newEvent.description,
-          creatorName: newEvent.organizerName,
-          nftEnabled: newEvent.nftEnabled,
+          organizerName: newEvent.organizerName,
           organizerWallet: newEvent.organizerWallet,
+          nftEnabled: newEvent.nftEnabled,
         },
       ]);
       setCreateModalVisible(false);
@@ -161,7 +79,7 @@ const Events = () => {
   };
 
   const handleEventPress = (eventId: string) => {
-    const event = events.find((e) => e.id === eventId);
+    const event = events?.find((e) => e.id === eventId);
     if (event) {
       setSelectedEvent(event);
       setModalVisible(true);
@@ -169,7 +87,7 @@ const Events = () => {
   };
 
   const handleViewQR = (eventId: string) => {
-    const event = events.find((e) => e.id === eventId);
+    const event = events?.find((e) => e.id === eventId);
     if (event) setQrDisplayEvent(event);
   };
 

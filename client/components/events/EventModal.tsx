@@ -27,7 +27,7 @@ type EventModalProps = {
     endTime: string;
     location: string;
     locationURL: string;
-    creatorName: string;
+    organizerName: string;
     nftEnabled: boolean;
     organizerWallet?: string;
   } | null;
@@ -161,8 +161,8 @@ const EventModal = ({
                   <View className="mt-2 flex-row items-center border-t border-solana-text/10 pt-2">
                     <View>
                       <Text className="mb-1 text-xs text-solana-text/60">Time</Text>
-                      <Text className="text-base font-semibold text-solana-teal">
-                        {event.startTime}
+                      <Text className="text-base font-semibold text-solana-teal flex-row items-center justify-center">
+                        {event.startTime} - 
                         {event.endTime}
                       </Text>
                     </View>
@@ -172,7 +172,7 @@ const EventModal = ({
                   <View className="flex-1">
                     <Text className="mb-1 text-xs text-solana-text/60">Organizer</Text>
                     <Text className="text-base font-semibold text-solana-text">
-                      {event.creatorName}
+                      {event.organizerName}
                     </Text>
                   </View>
                   <View className="flex-1 items-end">
