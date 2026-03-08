@@ -7,6 +7,6 @@ const controller = new Events();
 eventRoute.post('/create', controller.createEvent);
 eventRoute.get('/:eventId', controller.getEventId);
 eventRoute.get('/:eventId/qr', controller.getEventQr);
-eventRoute.delete('/:eventId', controller.deleteEvent)
+eventRoute.delete('/:eventId', controller.deleteEvent);
 
 export { eventRoute };
