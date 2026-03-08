@@ -13,7 +13,6 @@ export async function uploadImageToIPFS(imageUrl: string): Promise<string> {
   if (!PINATA_JWT) throw new Error('PINATA_JWT not configured.');
   if (imageUrl.startsWith('ipfs://')) return imageUrl;
 
-  // Handle base64 data URIs from mobile clients
   if (imageUrl.startsWith('data:')) {
     const matches = imageUrl.match(/^data:([^;]+);base64,(.+)$/s);
     if (!matches || !matches[1] || !matches[2]) throw new Error('Invalid data URI format');
