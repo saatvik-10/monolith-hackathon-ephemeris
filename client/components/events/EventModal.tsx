@@ -161,9 +161,8 @@ const EventModal = ({
                   <View className="mt-2 flex-row items-center border-t border-solana-text/10 pt-2">
                     <View>
                       <Text className="mb-1 text-xs text-solana-text/60">Time</Text>
-                      <Text className="text-base font-semibold text-solana-teal flex-row items-center justify-center">
-                        {event.startTime} - 
-                        {event.endTime}
+                      <Text className="flex-row items-center justify-center text-base font-semibold text-solana-teal">
+                        {event.startTime} - {event.endTime}
                       </Text>
                     </View>
                   </View>
