@@ -70,6 +70,7 @@ const CreateEventModal = ({ visible, onClose, onSubmit }: CreateEventModalProps)
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedStartTime, setSelectedStartTime] = useState<Date>(new Date());
   const [selectedEndTime, setSelectedEndTime] = useState<Date>(new Date());
+  const imageBase64Ref = React.useRef<string>('');
   const { pubkey } = useWalletStore();
 
   const set = (key: keyof CreateEventFormData) => (val: string | boolean) =>
@@ -118,9 +119,12 @@ const CreateEventModal = ({ visible, onClose, onSubmit }: CreateEventModalProps)
       allowsEditing: true,
       aspect: [3, 2],
       quality: 0.8,
+      base64: true,
     });
     if (!result.canceled) {
-      setForm((prev) => ({ ...prev, image: result.assets[0].uri }));
+      const asset = result.assets[0];
+      setForm((prev) => ({ ...prev, image: asset.uri }));
+      imageBase64Ref.current = asset.base64 ? `data:image/jpeg;base64,${asset.base64}` : asset.uri;
     }
   };
 
@@ -133,12 +137,14 @@ const CreateEventModal = ({ visible, onClose, onSubmit }: CreateEventModalProps)
       !form.location.trim()
     )
       return;
-    onSubmit(form);
+    onSubmit({ ...form, image: imageBase64Ref.current || form.image });
     setForm(INITIAL_FORM);
+    imageBase64Ref.current = '';
   };
 
   const handleClose = () => {
     setForm(INITIAL_FORM);
+    imageBase64Ref.current = '';
     onClose();
   };
 
