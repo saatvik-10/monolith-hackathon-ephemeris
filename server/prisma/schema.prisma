@@ -26,7 +26,7 @@ model Event {
   organizerName         String
   organizerWallet       String?
   collectionMintAddress String?
-  expiryWindow          Int
+  // expiryWindow          Int
   createdAt             DateTime @default(now())
 
   identities Identity[]
