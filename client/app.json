@@ -46,6 +46,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "8ab6c1bf-29fd-4f7b-abc2-36d6b5a68ffb"
+      }
+    },
+    "owner": "saatvik10s-organization"
   }
 }
