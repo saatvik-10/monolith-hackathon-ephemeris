@@ -5,14 +5,14 @@ import { prisma } from '../prisma';
 
 export async function proxy(ctx: Context, next: Next) {
   try {
-    const cookieToken = getCookie(ctx, 'auth_token');
-
     const authHeader = ctx.req.header('Authorization');
     const headerToken = authHeader?.startsWith('Bearer ')
       ? authHeader.slice(7)
       : null;
 
-    const token = cookieToken || headerToken;
+    const cookieToken = getCookie(ctx, 'auth_token');
+
+    const token = headerToken || cookieToken;
 
     if (!token) {
       return ctx.text('Not authenticated', 401);
