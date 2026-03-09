@@ -8,7 +8,8 @@ import { Heading } from '../../components/common/Heading';
 import { useWalletStore } from '@/components/store/walletStore';
 import { issueReceipt, mintNFT } from '@/lib/api';
 import { tokenStorage } from '@/utils/token';
-import { attendedEventsStorage, verifiedEventsStorage, AttendedEvent } from '@/utils/attendance';
+import { attendedEventsStorage, verifiedEventsStorage } from '@/utils/attendance';
+import { AttendedEvent } from '@/types';
 
 const Attendance = () => {
   const [attendedEvents, setAttendedEvents] = useState<AttendedEvent[]>([]);

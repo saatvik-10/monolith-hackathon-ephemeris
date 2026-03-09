@@ -5,7 +5,8 @@ import { Ionicons } from '@expo/vector-icons';
 import ScreenBackground from '../../components/screen/ScreenBackground';
 import GlassCard from '../../components/common/GlassCard';
 import { Heading } from '../../components/common/Heading';
-import { verifiedEventsStorage, VerifiedEvent } from '@/utils/attendance';
+import { verifiedEventsStorage } from '@/utils/attendance';
+import { VerifiedEvent } from '@/types';
 
 const ProofCard = ({ item }: { item: VerifiedEvent }) => (
   <GlassCard className="mb-3">
