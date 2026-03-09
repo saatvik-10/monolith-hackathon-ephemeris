@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/ephimeris.png",
-    "scheme": "client",
+    "scheme": "ephimeris",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {

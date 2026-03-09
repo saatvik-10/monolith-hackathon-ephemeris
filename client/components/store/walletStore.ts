@@ -1,7 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { transact, Web3MobileWallet } from '@solana-mobile/mobile-wallet-adapter-protocol-web3js';
 import { PublicKey } from '@solana/web3.js';
-import { Linking } from 'react-native';
 import { create } from 'zustand';
 
 interface WalletStore {
@@ -40,7 +39,6 @@ export const useWalletStore = create<WalletStore>((set) => ({
 
       set({ isConnected: true, pubkey: res });
       await AsyncStorage.setItem('walletPubkey', res);
-      Linking.openURL('ephemeris://');
     } catch (err) {
       console.error('Connection Failed:', err);
       set({ isConnected: false, pubkey: null });
