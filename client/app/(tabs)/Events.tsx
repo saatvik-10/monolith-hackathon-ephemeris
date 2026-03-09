@@ -9,6 +9,7 @@ import { useWalletStore } from '@/components/store/walletStore';
 import { createEvent, deleteEvent, getAllEvents, issueIdentity, markAttendance } from '@/lib/api';
 import { CreateEventFormData, Event } from '@/types';
 import { attendedEventsStorage } from '@/utils/attendance';
+import { notifyNewEvent } from '@/utils/notification';
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
 import { Alert, FlatList, Text, TouchableOpacity, View } from 'react-native';
@@ -88,6 +89,7 @@ const Events = () => {
         },
       ]);
       setCreateModalVisible(false);
+      notifyNewEvent(data.name);
       Alert.alert('Event Created', `"${data.name}" has been created!`);
     } catch {
       Alert.alert('Error', 'Failed to create event');
