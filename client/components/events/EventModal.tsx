@@ -31,7 +31,6 @@ type EventModalProps = {
     nftEnabled: boolean;
     organizerWallet?: string;
   } | null;
-  onEdit?: (eventId: string) => void;
   onViewQR?: (eventId: string) => void;
   onScanQR?: (eventId: string) => void;
   onDelete?: (eventId: string) => void;
@@ -42,7 +41,6 @@ const EventModal = ({
   visible,
   onClose,
   event,
-  onEdit,
   onViewQR,
   onScanQR,
   onDelete,
@@ -86,19 +84,6 @@ const EventModal = ({
 
               {canEdit && (
                 <View className="flex-row items-center gap-2">
-                  {onEdit && (
-                    <TouchableOpacity
-                      onPress={() => {
-                        onEdit(event.id);
-                        onClose();
-                      }}
-                      className="overflow-hidden rounded-xl">
-                      <GlassCard innerClassName="flex-row items-center gap-1.5 px-3 py-2">
-                        <Ionicons name="pencil-outline" size={14} color="#E2E8F0" />
-                        <Text className="text-sm font-semibold text-solana-text">Edit</Text>
-                      </GlassCard>
-                    </TouchableOpacity>
-                  )}
                   {onViewQR && (
                     <TouchableOpacity
                       onPress={() => {
@@ -134,8 +119,7 @@ const EventModal = ({
                   }}
                   className="self-center overflow-hidden rounded-2xl">
                   <GlassCard innerClassName="flex-row items-center gap-1.5 px-3 py-2">
-                    <Ionicons name="scan-outline" size={14} color="#14F195" />
-                    <Text className="text-sm font-semibold text-solana-teal">Scan QR</Text>
+                    <Ionicons name="scan-outline" size={18} color="#14F195" />
                   </GlassCard>
                 </TouchableOpacity>
               )}
