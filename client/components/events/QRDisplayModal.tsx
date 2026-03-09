@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { Modal, ScrollView, Share, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import * as Linking from 'expo-linking';
 
@@ -16,10 +16,6 @@ const QRDisplayModal = ({ visible, event, onClose }: QRDisplayModalProps) => {
   if (!event) return null;
 
   const qrValue = Linking.createURL(`attend/${event.id}`);
-
-  const handleShare = () => {
-    Share.share({ message: `Attend "${event.name}" — QR: ${qrValue}` });
-  };
 
   return (
     <Modal visible={visible} animationType="slide" transparent onRequestClose={onClose}>
@@ -66,16 +62,6 @@ const QRDisplayModal = ({ visible, event, onClose }: QRDisplayModalProps) => {
               </View>
             </View>
 
-            <View className="mb-6 rounded-xl border border-solana-text/10 bg-solana-text/5 px-4 py-3">
-              <Text className="mb-1 text-xs text-solana-muted">QR Value</Text>
-              <Text
-                className="text-sm text-solana-teal"
-                style={{ fontFamily: 'monospace' }}
-                numberOfLines={2}>
-                {qrValue}
-              </Text>
-            </View>
-
             <View className="mb-4 rounded-xl border border-solana-purple/20 bg-solana-purple/10 px-4 py-3">
               <View className="flex-row items-start gap-2">
                 <Ionicons
@@ -89,20 +75,6 @@ const QRDisplayModal = ({ visible, event, onClose }: QRDisplayModalProps) => {
                 </Text>
               </View>
             </View>
-
-            <TouchableOpacity
-              onPress={handleShare}
-              activeOpacity={0.85}
-              className="overflow-hidden rounded-xl">
-              <LinearGradient
-                colors={['#9945FF', '#14F195']}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-                className="flex-row items-center justify-center gap-2 py-3.5">
-                <Ionicons name="share-outline" size={18} color="white" />
-                <Text className="text-base font-bold text-white">Share QR</Text>
-              </LinearGradient>
-            </TouchableOpacity>
           </ScrollView>
         </BlurView>
       </View>
