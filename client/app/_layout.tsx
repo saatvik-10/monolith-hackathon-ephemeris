@@ -1,5 +1,4 @@
 import { useWalletStore } from '@/components/store/walletStore';
-import { registerForPushNotifications } from '@/utils/notification';
 import { Stack } from 'expo-router';
 import { useEffect } from 'react';
 import GradientBackground from '../components/screen/GradientBackground';
@@ -10,7 +9,6 @@ export default function RootLayout() {
 
   useEffect(() => {
     restoreWallet();
-    registerForPushNotifications();
   }, [restoreWallet]);
 
   return (
