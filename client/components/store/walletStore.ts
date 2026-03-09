@@ -15,15 +15,14 @@ interface WalletStore {
 const APP_IDENTITY = {
   name: 'Ephemeris',
   uri: 'https://ephemeris.app/',
-  icon: './assets/images/icon.png',
+  icon: './assets/images/ephimeris.png',
 };
-
 
 export const useWalletStore = create<WalletStore>((set) => ({
   isConnected: false,
   isConnecting: false,
   pubkey: null,
-  
+
   connect: async () => {
     set({ isConnecting: true });
     try {
