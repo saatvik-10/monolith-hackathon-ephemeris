@@ -1,28 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AttendedEvent, VerifiedEvent } from '@/types';
 
 const ATTENDED_EVENTS_KEY = 'attended_events';
 const VERIFIED_EVENTS_KEY = 'verified_events';
-
-export interface AttendedEvent {
-  eventId: string;
-  name: string;
-  image: string;
-  startDate: string;
-  nftEnabled: boolean;
-  attendedAt: string;
-  token: string;
-}
-
-export interface VerifiedEvent {
-  eventId: string;
-  name: string;
-  image: string;
-  startDate: string;
-  attendedAt: string;
-  verifiedAt: string;
-  mintAddress: string;
-  walletAddress: string;
-}
 
 export const attendedEventsStorage = {
   async getAll(): Promise<AttendedEvent[]> {
