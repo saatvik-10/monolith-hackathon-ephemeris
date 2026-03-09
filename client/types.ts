@@ -88,3 +88,24 @@ export interface VerifyProofResponse {
   type: 'ATTENDANCE' | 'RECEIPT';
   expiresAt: string;
 }
+
+export interface AttendedEvent {
+  eventId: string;
+  name: string;
+  image: string;
+  startDate: string;
+  nftEnabled: boolean;
+  attendedAt: string;
+  token: string;
+}
+
+export interface VerifiedEvent {
+  eventId: string;
+  name: string;
+  image: string;
+  startDate: string;
+  attendedAt: string;
+  verifiedAt: string;
+  mintAddress: string;
+  walletAddress: string;
+}
