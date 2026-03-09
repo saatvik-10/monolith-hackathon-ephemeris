@@ -11,7 +11,7 @@ import { CreateEventFormData, Event } from '@/types';
 import { attendedEventsStorage } from '@/utils/attendance';
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
-import { Alert, FlatList, TouchableOpacity } from 'react-native';
+import { Alert, FlatList, Text, TouchableOpacity, View } from 'react-native';
 import ScreenBackground from '../../components/screen/ScreenBackground';
 
 const Events = () => {
@@ -178,25 +178,34 @@ const Events = () => {
   return (
     <ScreenBackground>
       <Heading title="Events" />
-      <FlatList
-        data={events}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={{
-          paddingHorizontal: 16,
-          paddingBottom: 120,
-        }}
-        showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => (
-          <EventCard
-            id={item.id}
-            name={item.name}
-            startDate={item.startDate}
-            location={item.location}
-            image={item.image}
-            onPress={handleEventPress}
-          />
-        )}
-      />
+      {events.length === 0 ? (
+        <View className="flex-1 items-center justify-center px-8">
+          <Ionicons name="calendar-outline" size={48} color="#6B7280" />
+          <Text className="mt-4 text-center text-base text-solana-muted">
+            No events available. Check back later or create a new event to get started.
+          </Text>
+        </View>
+      ) : (
+        <FlatList
+          data={events}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={{
+            paddingHorizontal: 16,
+            paddingBottom: 120,
+          }}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item }) => (
+            <EventCard
+              id={item.id}
+              name={item.name}
+              startDate={item.startDate}
+              location={item.location}
+              image={item.image}
+              onPress={handleEventPress}
+            />
+          )}
+        />
+      )}
 
       <TouchableOpacity
         onPress={() => setCreateModalVisible(true)}
@@ -231,6 +240,7 @@ const Events = () => {
         onClose={() => setCreateModalVisible(false)}
         onSubmit={handleCreateEvent}
       />
+
       <QRDisplayModal
         visible={!!qrDisplayEvent}
         event={qrDisplayEvent}
