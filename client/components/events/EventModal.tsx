@@ -107,8 +107,7 @@ const EventModal = ({
                       }}
                       className="overflow-hidden rounded-xl">
                       <GlassCard innerClassName="flex-row items-center gap-1.5 px-3 py-2">
-                        <Ionicons name="qr-code-outline" size={14} color="#14F195" />
-                        <Text className="text-sm font-semibold text-solana-teal">QR</Text>
+                        <Ionicons name="qr-code-outline" size={18} color="#14F195" />
                       </GlassCard>
                     </TouchableOpacity>
                   )}
@@ -120,8 +119,7 @@ const EventModal = ({
                       }}
                       className="overflow-hidden rounded-xl">
                       <GlassCard innerClassName="flex-row items-center gap-1.5 px-3 py-2">
-                        <Ionicons name="trash-outline" size={14} color="#FF6B6B" />
-                        <Text className="text-sm font-semibold" style={{ color: '#FF6B6B' }}>Delete</Text>
+                        <Ionicons name="trash-outline" size={18} color="#FF6B6B" />
                       </GlassCard>
                     </TouchableOpacity>
                   )}
