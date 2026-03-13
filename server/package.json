@@ -13,7 +13,7 @@
     "tsx": "^4.7.0"
   },
   "peerDependencies": {
-    "typescript": "^5"
+    "typescript": "^5.9.3"
   },
   "dependencies": {
     "@hono/node-server": "^1.13.7",
@@ -24,6 +24,7 @@
     "bs58": "^6.0.0",
     "dotenv": "^17.3.1",
     "hono": "^4.11.9",
+    "ts-node": "^10.9.2",
     "tweetnacl": "^1.0.3",
     "zod": "^4.3.6"
   }
