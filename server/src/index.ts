@@ -11,7 +11,8 @@ const app = new Hono();
 app.use(logger());
 app.use(cors());
 
-app.get('/health', (c) => c.json({ status: 'ok' }, 200));
+// app.get('/health', (c) => c.json({ status: 'ok' }, 200));
+app.get("/health", (c) => c.text("ok"))
 
 app.route('/api', router);
 
