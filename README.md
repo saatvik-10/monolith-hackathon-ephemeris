@@ -101,3 +101,32 @@ There are no user accounts. When an attendee scans an event QR code, the server 
 ## NFT minting
 
 If an organizer enables NFT support when creating an event, a Solana NFT collection is created for that event. Attendees who connect a Solana wallet (via Mobile Wallet Adapter on Android) can mint an NFT linked to their receipt. The mint address and metadata URI are stored on the receipt record so the proof is always traceable back to the on-chain asset.
+
+---
+
+## Screens
+
+**S1 - Events**
+<img src="client/assets/screens/s1.jpeg" alt="Events screen" width="200" />
+
+Displays all available events. Organizers can create new events, attendees can browse and scan QR codes to join.
+
+**S2 - QR Scanner**
+<img src="client/assets/screens/s2.jpeg" alt="QR Scanner screen" width="200" />
+
+Attendees scan the QR code at the event door to receive their session-scoped identity and JWT token.
+
+**S3 - Attendance**
+<img src="client/assets/screens/s3.jpeg" alt="Attendance screen" width="200" />
+
+Mark your attendance for the current event. This is a one-time action that records your presence permanently.
+
+**S4 - Receipts & Minting**
+<img src="client/assets/screens/s4.jpeg" alt="Receipts screen" width="200" />
+
+View your receipts and mint Solana NFTs for your attendance. Each NFT is a verifiable on-chain proof that you attended the event.
+
+**S5 - Minted NFT in Phantom Wallet**
+<img src="client/assets/screens/s5.jpeg" alt="Minted NFT proof in Phantom Wallet" width="200" />
+
+The final proof of attendance — your minted NFT displayed in the Phantom Solana wallet, verifiable by anyone on the blockchain.
